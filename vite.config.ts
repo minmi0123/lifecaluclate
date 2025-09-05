@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react()],
   base: '/lifecaluclate/',
   server: {
-    historyApiFallback: true
+    open: '/lifecaluclate/'
   }
 })
