@@ -1,0 +1,295 @@
+.container {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  /* PC에서 모바일 화면처럼 보이게 하기 */
+  max-width: 414px;
+  margin: 0 auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.scroll-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  min-height: calc(100vh - 100px);
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 32px;
+  color: #495057;
+  text-align: center;
+  padding: 0 16px;
+}
+
+@media (max-width: 400px) {
+  .title {
+    font-size: 28px;
+    margin-bottom: 24px;
+  }
+}
+
+.input-container {
+  background-color: white;
+  padding: 24px;
+  border-radius: 20px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 380px;
+}
+
+.input-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.input-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #495057;
+  min-width: 80px;
+  flex: 1;
+}
+
+.time-input-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: 2px solid #dee2e6;
+  min-height: 56px;
+  flex: 2;
+  max-width: 200px;
+}
+
+.time-input {
+  padding: 12px;
+  font-size: 18px;
+  text-align: center;
+  min-width: 100px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  min-height: 48px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.time-button {
+  padding: 16px;
+  background-color: #e9ecef;
+  border: none;
+  border-radius: 10px;
+  margin: 4px;
+  min-width: 56px;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+  color: #495057;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+}
+
+.time-button:hover {
+  background-color: #dee2e6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.time-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.current-time {
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+  min-width: 100px;
+  text-align: center;
+  padding: 12px;
+  flex: 2;
+  max-width: 200px;
+  background-color: #e3f2fd;
+  border-radius: 12px;
+  border: 2px solid #bbdefb;
+}
+
+.calculate-button {
+  background-color: #495057;
+  padding: 20px 48px;
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 32px;
+  min-width: 240px;
+  min-height: 60px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+}
+
+.calculate-button:hover {
+  background-color: #343a40;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.calculate-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.result-container {
+  background-color: white;
+  padding: 28px;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 380px;
+}
+
+.result-title {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 0 24px 0;
+  color: #495057;
+}
+
+.progress-container {
+  margin-bottom: 24px;
+}
+
+.progress-bar {
+  height: 28px;
+  background-color: #e9ecef;
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #28a745, #20c997);
+  border-radius: 14px;
+  transition: width 0.3s ease;
+  box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+}
+
+.progress-text {
+  font-size: 18px;
+  text-align: center;
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.result {
+  font-size: 20px;
+  text-align: center;
+  line-height: 28px;
+  color: #212529;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+.reset-button {
+  background-color: #6c757d;
+  padding: 18px 32px;
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  min-width: 140px;
+  min-height: 56px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  display: block;
+  margin: 0 auto;
+}
+
+.reset-button:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.reset-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .container {
+    max-width: 100%;
+    margin: 0;
+    box-shadow: none;
+  }
+  
+  .scroll-container {
+    padding: 12px;
+  }
+  
+  .input-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .input-label {
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  
+  .time-input-container {
+    max-width: 100%;
+    justify-content: center;
+  }
+  
+  .current-time {
+    max-width: 100%;
+  }
+}
+
+/* PC에서 모바일 뷰 유지 */
+@media (min-width: 769px) {
+  body {
+    background-color: #e9ecef;
+    margin: 0;
+    padding: 20px;
+  }
+  
+  .container {
+    border-radius: 20px;
+    overflow: hidden;
+  }
+}
