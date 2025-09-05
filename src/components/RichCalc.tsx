@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './RichCalc.css';
-import { targets, type Target } from '../data/targets';
+import { targets } from '../data/targets';
 
 const RichCalc: React.FC = () => {
   const [salary, setSalary] = useState('100만원');
@@ -71,13 +71,11 @@ const RichCalc: React.FC = () => {
   const AmountInputWithControls = ({ 
     value, 
     onChangeText, 
-    placeholder,
-    suffix 
+    placeholder
   }: { 
     value: string; 
     onChangeText: (text: string) => void; 
     placeholder: string;
-    suffix: string;
   }) => (
     <div className="amount-input-container">
       <button 
@@ -124,7 +122,6 @@ const RichCalc: React.FC = () => {
             value={salary}
             onChangeText={setSalary}
             placeholder="입력하세요"
-            suffix=""
           />
         </div>
         

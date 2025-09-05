@@ -1,4 +1,4 @@
-import { Routes, Route, Link, useLocation } from 'react-router-dom'
+import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom'
 import RichCalc from './components/RichCalc'
 import WorkTimeCalc from './components/WorkTimeCalc'
 import SavingsCalc from './components/SavingsCalc'
@@ -12,37 +12,38 @@ function App() {
     <div className="App">
       <div className="tab-container">
         <Link 
-          to="/rich"
-          className={`tab-button ${location.pathname === '/rich' ? 'active' : ''}`}
+          to="/lifecaluclate/rich"
+          className={`tab-button ${location.pathname === '/lifecaluclate/rich' ? 'active' : ''}`}
         >
           💸 부자
         </Link>
         <Link 
-          to="/worktime"
-          className={`tab-button ${location.pathname === '/worktime' ? 'active' : ''}`}
+          to="/lifecaluclate/worktime"
+          className={`tab-button ${location.pathname === '/lifecaluclate/worktime' ? 'active' : ''}`}
         >
           🕒 퇴근
         </Link>
         <Link 
-          to="/savings"
-          className={`tab-button ${location.pathname === '/savings' ? 'active' : ''}`}
+          to="/lifecaluclate/savings"
+          className={`tab-button ${location.pathname === '/lifecaluclate/savings' ? 'active' : ''}`}
         >
           💰 저축
         </Link>
         <Link 
-          to="/coffee"
-          className={`tab-button ${location.pathname === '/coffee' ? 'active' : ''}`}
+          to="/lifecaluclate/coffee"
+          className={`tab-button ${location.pathname === '/lifecaluclate/coffee' ? 'active' : ''}`}
         >
           ☕ 커피
         </Link>
       </div>
       
       <Routes>
-        <Route path="/" element={<RichCalc />} />
-        <Route path="/rich" element={<RichCalc />} />
-        <Route path="/worktime" element={<WorkTimeCalc />} />
-        <Route path="/savings" element={<SavingsCalc />} />
-        <Route path="/coffee" element={<CoffeeCalc />} />
+        <Route path="/" element={<Navigate to="/lifecaluclate" replace />} />
+        <Route path="/lifecaluclate" element={<RichCalc />} />
+        <Route path="/lifecaluclate/rich" element={<RichCalc />} />
+        <Route path="/lifecaluclate/worktime" element={<WorkTimeCalc />} />
+        <Route path="/lifecaluclate/savings" element={<SavingsCalc />} />
+        <Route path="/lifecaluclate/coffee" element={<CoffeeCalc />} />
       </Routes>
     </div>
   )
