@@ -15,6 +15,7 @@
 }
 
 .tab-container {
+  box-sizing: border-box;
   display: flex;
   background-color: white;
   border-radius: 16px;
@@ -28,8 +29,9 @@
 }
 
 .tab-button {
+  box-sizing: border-box;
   flex: 1;
-  padding: 10px 12px;
+  padding: 10px 6px;
   border: none;
   border-radius: 12px;
   background-color: transparent;
@@ -40,7 +42,7 @@
   transition: all 0.2s ease;
   touch-action: manipulation;
   white-space: nowrap;
-  min-width: 80px;
+  min-width: 64px;
   text-decoration: none;
   display: block;
   text-align: center;

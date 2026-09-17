@@ -1,0 +1,381 @@
+/*
+ * 클래스 이름에 ss- 를 붙인다.
+ * 다른 탭들이 .container / .title 같은 일반적인 이름을 쓰고 있어서,
+ * CSS가 전역으로 합쳐질 때 서로 덮어쓰는 걸 피하려는 것.
+ */
+.ss-container {
+  --ss-surface: #ffffff;
+  --ss-page: #f8f9fa;
+  --ss-text: #212529;
+  --ss-text-muted: #6c757d;
+  --ss-border: #dee2e6;
+  /* 분포 막대 — 단일 계열이라 범례 없이 파랑 한 가지, 내 구간만 진하게. */
+  --ss-bar: #5598e7;
+  --ss-bar-mine: #184f95;
+  --ss-marker: #0b0b0b;
+
+  min-height: 100vh;
+  background-color: var(--ss-page);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  /* .App 이 flex 컨테이너라 width 를 주지 않으면 내용 폭(414px)에서 줄지 않아
+     좁은 화면에서 가로 스크롤이 생긴다. */
+  width: 100%;
+  max-width: 414px;
+  margin: 0 auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  color: var(--ss-text);
+}
+
+.ss-scroll {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 16px;
+  gap: 16px;
+}
+
+.ss-loading,
+.ss-error {
+  text-align: center;
+  color: var(--ss-text-muted);
+  padding: 48px 16px;
+  font-size: 15px;
+}
+
+/* ── 샘플 데이터 경고 ── */
+.ss-sample-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: #fff3cd;
+  border: 2px solid #ffda6a;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: #664d03;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.ss-sample-banner strong {
+  font-size: 14px;
+}
+
+/* ── 머리말 ── */
+.ss-title {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 4px 0 0;
+  text-align: center;
+}
+
+.ss-subtitle {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ss-text-muted);
+}
+
+/* ── 필터 ── */
+.ss-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  background-color: var(--ss-surface);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.ss-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.ss-field-wide {
+  grid-column: 1 / -1;
+}
+
+.ss-field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ss-text-muted);
+}
+
+.ss-select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 2px solid var(--ss-border);
+  border-radius: 10px;
+  background-color: var(--ss-surface);
+  color: var(--ss-text);
+  font-size: 15px;
+  font-family: inherit;
+}
+
+/* ── 월급 입력 ── */
+.ss-salary-input {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: var(--ss-surface);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.ss-stepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ss-step-button {
+  width: 48px;
+  min-height: 48px;
+  border: 2px solid var(--ss-border);
+  border-radius: 12px;
+  background-color: var(--ss-page);
+  color: var(--ss-text);
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  flex-shrink: 0;
+}
+
+.ss-step-button:hover {
+  border-color: var(--ss-bar);
+}
+
+.ss-input {
+  flex: 1;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 2px solid var(--ss-border);
+  border-radius: 12px;
+  background-color: var(--ss-page);
+  color: var(--ss-text);
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  font-family: inherit;
+}
+
+.ss-wage-definition {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ss-text-muted);
+  line-height: 1.4;
+}
+
+.ss-hint {
+  margin: 0;
+  text-align: center;
+  color: var(--ss-text-muted);
+  font-size: 14px;
+  padding: 24px 0;
+}
+
+/* ── 결과 ── */
+.ss-headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--ss-surface);
+  border-radius: 16px;
+  padding: 20px 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.ss-headline-label {
+  font-size: 13px;
+  color: var(--ss-text-muted);
+}
+
+.ss-headline-value {
+  font-size: 40px;
+  font-weight: bold;
+  line-height: 1.1;
+  color: var(--ss-bar-mine);
+}
+
+.ss-headline-sub {
+  font-size: 13px;
+  color: var(--ss-text-muted);
+  line-height: 1.5;
+}
+
+.ss-notice {
+  margin: 0;
+  background-color: #e7f1ff;
+  border: 1px solid #b6d4fe;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #084298;
+}
+
+/* ── 그래프 ── */
+.ss-figure {
+  margin: 0;
+  background-color: var(--ss-surface);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.ss-figure-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.ss-figure-note {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ss-text-muted);
+  flex-shrink: 0;
+}
+
+.ss-chart {
+  width: 100%;
+  height: auto;
+  display: block;
+  overflow: visible;
+}
+
+.ss-axis-line {
+  stroke: var(--ss-border);
+  stroke-width: 1;
+}
+
+.ss-bar {
+  fill: var(--ss-bar);
+}
+
+.ss-bar-mine {
+  fill: var(--ss-bar-mine);
+}
+
+.ss-bar-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.ss-bar-hit:hover + .ss-bar,
+.ss-bar-hit:focus {
+  outline: none;
+}
+
+.ss-marker {
+  stroke: var(--ss-marker);
+  stroke-width: 2;
+}
+
+.ss-marker-chip {
+  fill: var(--ss-marker);
+}
+
+.ss-marker-text {
+  fill: #ffffff;
+  font-size: 11px;
+  font-weight: bold;
+  text-anchor: middle;
+  font-family: inherit;
+}
+
+.ss-axis-label {
+  fill: var(--ss-text-muted);
+  font-size: 10px;
+  font-family: inherit;
+}
+
+.ss-readout {
+  margin: 6px 0 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ss-text-muted);
+  min-height: 18px;
+}
+
+/* ── 분위수 표 ── */
+.ss-table-toggle {
+  background-color: var(--ss-surface);
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  font-size: 13px;
+}
+
+.ss-table-toggle summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.ss-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.ss-table th,
+.ss-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--ss-border);
+  text-align: right;
+  font-weight: 400;
+}
+
+.ss-table thead th {
+  font-weight: 600;
+  color: var(--ss-text-muted);
+  font-size: 12px;
+}
+
+.ss-table tbody th {
+  text-align: left;
+  color: var(--ss-text-muted);
+}
+
+/* ── 꼬리말 ── */
+.ss-footnotes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 1.55;
+  color: var(--ss-text-muted);
+  padding: 4px 2px 16px;
+}
+
+.ss-footnotes p {
+  margin: 0;
+}
+
+@media (max-width: 400px) {
+  .ss-title {
+    font-size: 23px;
+  }
+
+  .ss-headline-value {
+    font-size: 34px;
+  }
+}

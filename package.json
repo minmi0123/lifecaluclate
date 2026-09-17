@@ -8,9 +8,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "data:sample": "node scripts/make-sample-data.mjs",
+    "data:build": "node scripts/build-salary-stats.mjs scripts/mdis.config.json",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist" 
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "gh-pages": "^6.3.0",

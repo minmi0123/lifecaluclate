@@ -1,69 +1,58 @@
-# React + TypeScript + Vite
+# lifecaluclate
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+직장인용 계산기 모음. 메인은 **월급 통계**다.
 
-Currently, two official plugins are available:
+## 월급 통계 (메인)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+나이대 × 성별 × 직종 안에서 내 월급이 **상위 몇 %**인지 보여준다.
 
-## Expanding the ESLint configuration
+- 평균이 아니라 **분위수**를 보여준다. 평균은 소수의 고소득자 때문에 위로 끌려간다.
+- 입력한 월급은 **브라우저 안에서만** 계산한다. 서버로 보내거나 저장하지 않는다.
+- 고른 조합의 표본이 기준치(기본 30명)보다 적으면 **한 단계 넓혀서** 비교하고 그 사실을 화면에 알린다.
+  (30대 + 여성 + IT 에서 표본이 모자라면 30대 + IT 로)
+- 회사별 연봉 추정은 **하지 않는다**.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### ⚠️ 지금 들어있는 데이터는 샘플이다
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+`public/data/salary-stats.json` 은 화면과 계산을 확인하려고 만든 **가짜 데이터**다.
+`meta.isSample` 이 `true` 인 동안 화면 맨 위에 경고 배너가 뜬다.
+실제 MDIS 원자료로 바꾸는 방법은 [`scripts/README.md`](scripts/README.md)에 있다.
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 구조
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+MDIS 원자료(CSV) ──[scripts/build-salary-stats.mjs]──> public/data/salary-stats.json
+                                                              │
+                                              정적 페이지가 이 JSON 하나만 fetch
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+외부 API를 실행 중에 부르지 않으므로 CORS · API 키 노출 · http 전용 API 문제가 없다.
+데이터 갱신은 JSON만 다시 만들면 되고 코드는 건드리지 않는다.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 나머지 탭
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| 탭 | 하는 일 |
+|---|---|
+| 💸 부자 | 월급으로 랜덤 목표 상품을 사는 데 몇 년 걸리는지 |
+| 🕒 퇴근 | 출퇴근 시각 기준 오늘 근무 진행률 |
+| 💰 저축 | 저축률과 목표 금액 도달 시점 |
+| ☕ 커피 | 하루 커피값의 1년치 환산 |
+
+## 개발
+
+```bash
+npm install
+npm run dev          # 개발 서버 (http://localhost:5173/lifecaluclate/)
+npm run build        # 타입 체크 + 빌드
+npm run lint
+npm run preview      # 빌드 결과 확인
 ```
+
+데이터:
+
+```bash
+npm run data:sample  # 샘플 데이터 다시 만들기 (고정 시드)
+npm run data:build   # 실제 원자료로 만들기 (scripts/mdis.config.json 필요)
+```
+
+배포는 GitHub Pages (`npm run deploy`). Vite `base` 와 라우터 경로가 `/lifecaluclate/` 로 맞춰져 있다.
