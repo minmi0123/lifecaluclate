@@ -4,6 +4,10 @@
   display: flex;
   flex-direction: column;
   /* PC에서 모바일 화면처럼 보이게 하기 */
+  box-sizing: border-box;
+  /* .App 이 flex 컨테이너라 width 를 주지 않으면 내용 폭에서 줄지 않아
+     좁은 화면에서 가로 스크롤이 생긴다. */
+  width: 100%;
   max-width: 414px;
   margin: 0 auto;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);

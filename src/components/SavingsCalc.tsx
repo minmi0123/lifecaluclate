@@ -84,7 +84,7 @@ const SavingsCalc: React.FC = () => {
       }
       
       setter(newAmount.toString() + unit);
-    } catch (error) {
+    } catch {
       // 에러 발생시 기본값으로 설정
       if (unit === '만원') {
         setter('100만원');

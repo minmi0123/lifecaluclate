@@ -1,3 +1,12 @@
+/* width 에 padding·border 를 포함시킨다.
+   이게 없으면 width:100% 에 padding 을 준 요소가 부모보다 커져서
+   좁은 화면에서 가로 스크롤이 생긴다. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

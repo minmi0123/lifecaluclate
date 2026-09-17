@@ -62,7 +62,7 @@ const RichCalc: React.FC = () => {
       }
       
       setter(newAmount.toString() + '만원');
-    } catch (error) {
+    } catch {
       // 에러 발생시 기본값으로 설정
       setter('100만원');
     }

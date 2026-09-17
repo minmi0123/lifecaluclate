@@ -51,7 +51,7 @@ const CoffeeCalc: React.FC = () => {
       }
       
       setter(newCount.toString() + '잔');
-    } catch (error) {
+    } catch {
       // 에러 발생시 기본값으로 설정
       setter('1잔');
     }

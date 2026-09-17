@@ -76,7 +76,7 @@ const WorkTimeCalc: React.FC = () => {
         setResult(message);
         setProgress(progressPercent);
       }
-    } catch (error) {
+    } catch {
       alert('시간 형식이 올바르지 않습니다. (HH:MM 형식으로 입력해주세요)');
     }
   };
@@ -105,7 +105,7 @@ const WorkTimeCalc: React.FC = () => {
       const newMins = totalMinutes % 60;
       const newTime = `${newHours.toString().padStart(2, '0')}:${newMins.toString().padStart(2, '0')}`;
       setter(newTime);
-    } catch (error) {
+    } catch {
       // 에러 발생시 기본값으로 설정
       setter('09:00');
     }
