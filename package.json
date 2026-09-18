@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://mingzzang14.github.io/lifecaluclate",
+  "homepage": "https://minmi0123.github.io/lifecaluclate",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

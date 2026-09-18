@@ -64,5 +64,18 @@ npm run data:sample  # 샘플 데이터 다시 만들기 (고정 시드)
 npm run data:build   # 실제 원자료로 만들기 (scripts/mdis.config.json 필요)
 ```
 
-배포는 GitHub Pages (`npm run deploy`). Vite `base` 가 `/lifecaluclate/` 로 맞춰져 있다.
-라우팅은 쓰지 않는다. 한 페이지 + 해시라서 새로고침해도 404 가 나지 않는다.
+## 배포
+
+`main` 에 push 하면 GitHub Actions(`.github/workflows/deploy.yml`)가 빌드해서
+GitHub Pages 에 올린다. PR 에서는 lint + build 까지만 돌고 배포하지 않는다.
+
+주소: https://minmi0123.github.io/lifecaluclate/
+
+**저장소 Settings → Pages → Source 가 "GitHub Actions" 여야 한다.**
+"Deploy from a branch" 로 되어 있으면 배포 단계에서 실패한다.
+
+Vite `base` 가 `/lifecaluclate/` 로 맞춰져 있다. 라우팅은 쓰지 않고 한 페이지 +
+해시라서 새로고침해도 404 가 나지 않는다.
+
+`npm run deploy` (gh-pages 브랜치로 직접 push)도 아직 남아 있지만,
+Actions 로 배포한다면 쓸 일이 없다.
