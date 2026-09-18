@@ -1,7 +1,6 @@
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom'
 import SalaryStats from './components/SalaryStats'
 import RichCalc from './components/RichCalc'
-import WorkTimeCalc from './components/WorkTimeCalc'
 import SavingsCalc from './components/SavingsCalc'
 import CoffeeCalc from './components/CoffeeCalc'
 import './App.css'
@@ -12,7 +11,6 @@ const BASE = '/lifecaluclate'
 const tabs = [
   { path: `${BASE}/salary`, label: '📊 월급', aliases: [BASE, `${BASE}/`] },
   { path: `${BASE}/rich`, label: '💸 부자', aliases: [] },
-  { path: `${BASE}/worktime`, label: '🕒 퇴근', aliases: [] },
   { path: `${BASE}/savings`, label: '💰 저축', aliases: [] },
   { path: `${BASE}/coffee`, label: '☕ 커피', aliases: [] },
 ]
@@ -42,7 +40,6 @@ function App() {
         <Route path={BASE} element={<SalaryStats />} />
         <Route path={`${BASE}/salary`} element={<SalaryStats />} />
         <Route path={`${BASE}/rich`} element={<RichCalc />} />
-        <Route path={`${BASE}/worktime`} element={<WorkTimeCalc />} />
         <Route path={`${BASE}/savings`} element={<SavingsCalc />} />
         <Route path={`${BASE}/coffee`} element={<CoffeeCalc />} />
         <Route path="*" element={<Navigate to={BASE} replace />} />
