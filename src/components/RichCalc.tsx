@@ -23,14 +23,14 @@ const AmountInputWithControls = ({
   };
 
   return (
-    <div className="amount-input-container">
-      <button className="amount-button" onClick={() => adjust(50)} type="button">
+    <div className="rich-amount-input-container">
+      <button className="rich-amount-button" onClick={() => adjust(50)} type="button">
         ▲
       </button>
 
-      <div className="amount-input-wrapper">
+      <div className="rich-amount-input-wrapper">
         <input
-          className="amount-input"
+          className="rich-amount-input"
           placeholder={placeholder}
           type="text"
           inputMode="numeric"
@@ -39,7 +39,7 @@ const AmountInputWithControls = ({
         />
       </div>
 
-      <button className="amount-button" onClick={() => adjust(-50)} type="button">
+      <button className="rich-amount-button" onClick={() => adjust(-50)} type="button">
         ▼
       </button>
     </div>
@@ -94,12 +94,12 @@ const RichCalc: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      <div className="scroll-container">
-        <h1 className="title">💸 부자 계산기 💸</h1>
+    <div className="rich-container">
+      <div className="rich-scroll-container">
+        <h1 className="rich-title">💸 부자 계산기 💸</h1>
         
-        <div className="input-container">
-          <label className="input-label">월급:</label>
+        <div className="rich-input-container">
+          <label className="rich-input-label">월급:</label>
           <AmountInputWithControls
             value={salary}
             onChangeText={setSalary}
@@ -108,7 +108,7 @@ const RichCalc: React.FC = () => {
         </div>
         
         <button 
-          className="calculate-button" 
+          className="rich-calculate-button" 
           onClick={calculate}
           type="button"
         >
@@ -116,16 +116,16 @@ const RichCalc: React.FC = () => {
         </button>
         
         {result && (
-          <div className="result-container">
-            <div className="result-area">
-              <h2 className="result-title">📊 계산 결과</h2>
-              <div className="result" style={{ whiteSpace: 'pre-line' }}>{result}</div>
-              <div className="result" style={{ whiteSpace: 'pre-line' }}>{result2}</div>
+          <div className="rich-result-container">
+            <div className="rich-result-area">
+              <h2 className="rich-result-title">📊 계산 결과</h2>
+              <div className="rich-result" style={{ whiteSpace: 'pre-line' }}>{result}</div>
+              <div className="rich-result" style={{ whiteSpace: 'pre-line' }}>{result2}</div>
             </div>
             
-            <div className="button-container">
+            <div className="rich-button-container">
               <button 
-                className="reset-button" 
+                className="rich-reset-button" 
                 onClick={resetAll}
                 type="button"
               >

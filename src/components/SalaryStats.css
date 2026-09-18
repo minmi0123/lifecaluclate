@@ -14,7 +14,6 @@
   --ss-bar-mine: #184f95;
   --ss-marker: #0b0b0b;
 
-  min-height: 100vh;
   background-color: var(--ss-page);
   display: flex;
   flex-direction: column;

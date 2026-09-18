@@ -21,9 +21,9 @@ const StepperInput: React.FC<{
 }> = ({ value, suffix, step, label, onChange }) => (
   <div className="coffee-field">
     <span className="coffee-field-label">{label}</span>
-    <div className="count-input-container">
+    <div className="coffee-count-input-container">
       <button
-        className="count-button"
+        className="coffee-count-button"
         type="button"
         aria-label={`${label} 늘리기`}
         onClick={() => onChange(`${toNumber(value) + step}${suffix}`)}
@@ -31,9 +31,9 @@ const StepperInput: React.FC<{
         ▲
       </button>
 
-      <div className="count-input-wrapper">
+      <div className="coffee-count-input-wrapper">
         <input
-          className="count-input"
+          className="coffee-count-input"
           type="text"
           inputMode="numeric"
           aria-label={label}
@@ -43,7 +43,7 @@ const StepperInput: React.FC<{
       </div>
 
       <button
-        className="count-button"
+        className="coffee-count-button"
         type="button"
         aria-label={`${label} 줄이기`}
         onClick={() => onChange(`${Math.max(0, toNumber(value) - step)}${suffix}`)}
@@ -130,15 +130,15 @@ const CoffeeCalc: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      <div className="scroll-container">
-        <h1 className="title">☕ 커피값 계산기 ☕</h1>
+    <div className="coffee-container">
+      <div className="coffee-scroll-container">
+        <h1 className="coffee-title">☕ 커피값 계산기 ☕</h1>
 
-        <div className="price-info">
-          <div className="price-text">1잔 가격: 3,000원</div>
+        <div className="coffee-price-info">
+          <div className="coffee-price-text">1잔 가격: 3,000원</div>
         </div>
 
-        <div className="input-container">
+        <div className="coffee-input-container">
           <StepperInput
             label="내 월급"
             value={salary}
@@ -155,29 +155,29 @@ const CoffeeCalc: React.FC = () => {
           />
         </div>
 
-        <button className="calculate-button" onClick={calculate} type="button">
+        <button className="coffee-calculate-button" onClick={calculate} type="button">
           💰 계산하기
         </button>
 
         {error && <div className="coffee-error">{error}</div>}
 
         {result && (
-          <div className="result-container">
-            <div className="result-area">
-              <h2 className="result-title">📊 계산 결과</h2>
-              <div className="result">{result.headline}</div>
+          <div className="coffee-result-container">
+            <div className="coffee-result-area">
+              <h2 className="coffee-result-title">📊 계산 결과</h2>
+              <div className="coffee-result">{result.headline}</div>
               {result.sharePercent && (
                 <>
                   <div className="coffee-share-label">{result.shareLabel}</div>
                   <div className="coffee-share">{result.sharePercent}</div>
-                  <div className="result coffee-days">{result.days}</div>
+                  <div className="coffee-result coffee-days">{result.days}</div>
                 </>
               )}
-              <div className="result">{result.comment}</div>
+              <div className="coffee-result">{result.comment}</div>
             </div>
 
-            <div className="button-container">
-              <button className="reset-button" onClick={resetAll} type="button">
+            <div className="coffee-button-container">
+              <button className="coffee-reset-button" onClick={resetAll} type="button">
                 🔄 초기화
               </button>
             </div>

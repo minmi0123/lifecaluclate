@@ -29,9 +29,19 @@ MDIS 원자료(CSV) ──[scripts/build-salary-stats.mjs]──> public/data/sa
 외부 API를 실행 중에 부르지 않으므로 CORS · API 키 노출 · http 전용 API 문제가 없다.
 데이터 갱신은 JSON만 다시 만들면 되고 코드는 건드리지 않는다.
 
-## 나머지 탭
+## 한 페이지 구성
 
-| 탭 | 하는 일 |
+네 구역이 한 페이지에 순서대로 쌓여 있고, 위쪽 탭을 누르면 그 구역으로 스크롤한다.
+탭바는 `position: sticky` 로 붙어 있어 내려가도 계속 누를 수 있다.
+`#salary` `#rich` `#savings` `#coffee` 해시로 바로 들어갈 수도 있다.
+
+컴포넌트마다 CSS 클래스에 접두사(`ss-` `rich-` `savings-` `coffee-`)를 붙여 둔다.
+CSS 는 전역으로 합쳐지므로, 접두사가 없으면 한 페이지에 함께 그려질 때
+나중에 import 된 파일이 앞의 스타일을 덮어쓴다.
+
+## 구역별 하는 일
+
+| 구역 | 하는 일 |
 |---|---|
 | 💸 부자 | 월급으로 랜덤 목표 상품을 사는 데 몇 년 걸리는지 |
 | 💰 저축 | 저축률과 목표 금액 도달 시점 |
@@ -54,4 +64,5 @@ npm run data:sample  # 샘플 데이터 다시 만들기 (고정 시드)
 npm run data:build   # 실제 원자료로 만들기 (scripts/mdis.config.json 필요)
 ```
 
-배포는 GitHub Pages (`npm run deploy`). Vite `base` 와 라우터 경로가 `/lifecaluclate/` 로 맞춰져 있다.
+배포는 GitHub Pages (`npm run deploy`). Vite `base` 가 `/lifecaluclate/` 로 맞춰져 있다.
+라우팅은 쓰지 않는다. 한 페이지 + 해시라서 새로고침해도 404 가 나지 않는다.

@@ -10,11 +10,14 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
 .tab-container {
+  /* 내려가도 탭을 계속 누를 수 있게 위에 붙여둔다. */
+  position: sticky;
+  top: 0;
+  z-index: 10;
   box-sizing: border-box;
   display: flex;
   background-color: white;
@@ -82,4 +85,31 @@
   .App {
     background-color: #f8f9fa;
   }
+}
+
+.sections {
+  width: 100%;
+  max-width: 414px;
+  display: flex;
+  flex-direction: column;
+}
+
+.section {
+  width: 100%;
+  /* 탭바에 구역 제목이 가리지 않도록 스크롤을 그만큼 덜 내린다. */
+  scroll-margin-top: 64px;
+}
+
+/* 구역 사이 경계 */
+.section + .section {
+  border-top: 8px solid #e9ecef;
+}
+
+/*
+ * 마지막 구역은 화면 하나만큼 높이를 확보한다.
+ * 그래야 탭을 눌렀을 때 스크롤 여유가 남아 맨 위까지 올라온다.
+ * 구역이 아니라 그 안의 컨테이너에 걸어야 배경색이 함께 늘어난다.
+ */
+.section:last-child > * {
+  min-height: calc(100vh - 64px);
 }

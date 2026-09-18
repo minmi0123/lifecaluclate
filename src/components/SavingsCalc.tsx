@@ -26,14 +26,14 @@ const AmountInputWithControls = ({
   };
 
   return (
-    <div className="amount-input-container">
-      <button className="amount-button" onClick={() => adjust(increment)} type="button">
+    <div className="savings-amount-input-container">
+      <button className="savings-amount-button" onClick={() => adjust(increment)} type="button">
         ▲
       </button>
 
-      <div className="amount-input-wrapper">
+      <div className="savings-amount-input-wrapper">
         <input
-          className="amount-input"
+          className="savings-amount-input"
           placeholder={placeholder}
           type="text"
           inputMode="numeric"
@@ -42,7 +42,7 @@ const AmountInputWithControls = ({
         />
       </div>
 
-      <button className="amount-button" onClick={() => adjust(-increment)} type="button">
+      <button className="savings-amount-button" onClick={() => adjust(-increment)} type="button">
         ▼
       </button>
     </div>
@@ -120,12 +120,12 @@ const SavingsCalc: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      <div className="scroll-container">
-        <h1 className="title">💰 저축률 계산기 💰</h1>
+    <div className="savings-container">
+      <div className="savings-scroll-container">
+        <h1 className="savings-title">💰 저축률 계산기 💰</h1>
       
-        <div className="input-container">
-          <label className="input-label">월급:</label>
+        <div className="savings-input-container">
+          <label className="savings-input-label">월급:</label>
           <AmountInputWithControls
             value={salary}
             onChangeText={setSalary}
@@ -134,8 +134,8 @@ const SavingsCalc: React.FC = () => {
           />
         </div>
 
-        <div className="input-container">
-          <label className="input-label">저축:</label>
+        <div className="savings-input-container">
+          <label className="savings-input-label">저축:</label>
           <AmountInputWithControls
             value={savings}
             onChangeText={setSavings}
@@ -145,8 +145,8 @@ const SavingsCalc: React.FC = () => {
           />
         </div>
 
-        <div className="input-container">
-          <label className="input-label">목표:</label>
+        <div className="savings-input-container">
+          <label className="savings-input-label">목표:</label>
           <AmountInputWithControls
             value={target}
             onChangeText={setTarget}
@@ -157,7 +157,7 @@ const SavingsCalc: React.FC = () => {
         </div>
         
         <button 
-          className="calculate-button" 
+          className="savings-calculate-button" 
           onClick={calculate}
           type="button"
         >
@@ -165,16 +165,16 @@ const SavingsCalc: React.FC = () => {
         </button>
         
         {result && (
-          <div className="result-container">
-            <div className="result-area">
-              <h2 className="result-title">📊 계산 결과</h2>
-              <div className="result" style={{ whiteSpace: 'pre-line' }}>{result}</div>
-              <div className="result" style={{ whiteSpace: 'pre-line' }}>{result2}</div>
+          <div className="savings-result-container">
+            <div className="savings-result-area">
+              <h2 className="savings-result-title">📊 계산 결과</h2>
+              <div className="savings-result" style={{ whiteSpace: 'pre-line' }}>{result}</div>
+              <div className="savings-result" style={{ whiteSpace: 'pre-line' }}>{result2}</div>
             </div>
             
-            <div className="button-container">
+            <div className="savings-button-container">
               <button 
-                className="reset-button" 
+                className="savings-reset-button" 
                 onClick={resetAll}
                 type="button"
               >

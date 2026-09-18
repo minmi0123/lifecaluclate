@@ -1,11 +1,10 @@
-.container {
-  min-height: 100vh;
+.coffee-container {
   background-color: #f8f9fa;
   display: flex;
   flex-direction: column;
   /* PC에서 모바일 화면처럼 보이게 하기 */
   box-sizing: border-box;
-  /* .App 이 flex 컨테이너라 width 를 주지 않으면 내용 폭에서 줄지 않아
+  /* .coffee-App 이 flex 컨테이너라 width 를 주지 않으면 내용 폭에서 줄지 않아
      좁은 화면에서 가로 스크롤이 생긴다. */
   width: 100%;
   max-width: 414px;
@@ -14,17 +13,15 @@
   position: relative;
 }
 
-.scroll-container {
+.coffee-scroll-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 16px;
-  min-height: calc(100vh - 100px);
+  padding: 32px 16px;
 }
 
-.title {
+.coffee-title {
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 32px;
@@ -34,13 +31,13 @@
 }
 
 @media (max-width: 400px) {
-  .title {
+  .coffee-title {
     font-size: 28px;
     margin-bottom: 24px;
   }
 }
 
-.price-info {
+.coffee-price-info {
   background-color: #fff3cd;
   padding: 20px;
   border-radius: 16px;
@@ -51,14 +48,14 @@
   box-shadow: 0 4px 12px rgba(255, 234, 167, 0.3);
 }
 
-.price-text {
+.coffee-price-text {
   font-size: 20px;
   font-weight: bold;
   color: #856404;
   text-align: center;
 }
 
-.input-container {
+.coffee-input-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,7 +65,7 @@
   gap: 16px;
 }
 
-.count-input-container {
+.coffee-count-input-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -81,7 +78,7 @@
   max-width: 300px;
 }
 
-.count-input-wrapper {
+.coffee-count-input-wrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -90,7 +87,7 @@
   min-width: 120px;
 }
 
-.count-input {
+.coffee-count-input {
   flex: 1;
   /* input 은 기본 고유 폭이 있어서 min-width 를 풀어주지 않으면
      좁은 화면에서 줄지 않고 넘친다. */
@@ -105,7 +102,7 @@
   font-weight: 600;
 }
 
-.count-suffix {
+.coffee-count-suffix {
   font-size: 16px;
   color: #6c757d;
   font-weight: 600;
@@ -113,7 +110,7 @@
   min-width: 30px;
 }
 
-.count-button {
+.coffee-count-button {
   padding: 16px;
   background-color: #e9ecef;
   border: none;
@@ -133,18 +130,18 @@
   touch-action: manipulation;
 }
 
-.count-button:hover {
+.coffee-count-button:hover {
   background-color: #dee2e6;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.count-button:active {
+.coffee-count-button:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.calculate-button {
+.coffee-calculate-button {
   background-color: #8B4513;
   padding: 20px 48px;
   border: none;
@@ -162,18 +159,18 @@
   touch-action: manipulation;
 }
 
-.calculate-button:hover {
+.coffee-calculate-button:hover {
   background-color: #6d3410;
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(139, 69, 19, 0.4);
 }
 
-.calculate-button:active {
+.coffee-calculate-button:active {
   transform: translateY(0);
   box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
 }
 
-.result-container {
+.coffee-result-container {
   margin-top: 32px;
   display: flex;
   flex-direction: column;
@@ -181,7 +178,7 @@
   width: 100%;
 }
 
-.result-area {
+.coffee-result-area {
   background-color: #f8f9fa;
   padding: 28px;
   border-radius: 20px;
@@ -192,7 +189,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.result-title {
+.coffee-result-title {
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -200,7 +197,7 @@
   color: #495057;
 }
 
-.result {
+.coffee-result {
   font-size: 20px;
   text-align: center;
   margin-bottom: 16px;
@@ -209,7 +206,7 @@
   font-weight: 500;
 }
 
-.button-container {
+.coffee-button-container {
   display: flex;
   flex-direction: row;
   gap: 16px;
@@ -217,7 +214,7 @@
   justify-content: center;
 }
 
-.reset-button {
+.coffee-reset-button {
   background-color: #6c757d;
   padding: 18px 32px;
   border: none;
@@ -234,40 +231,40 @@
   touch-action: manipulation;
 }
 
-.reset-button:hover {
+.coffee-reset-button:hover {
   background-color: #5a6268;
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-.reset-button:active {
+.coffee-reset-button:active {
   transform: translateY(0);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 }
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
-  .container {
+  .coffee-container {
     max-width: 100%;
     margin: 0;
     box-shadow: none;
   }
   
-  .scroll-container {
+  .coffee-scroll-container {
     padding: 12px;
   }
   
-  .input-container {
+  .coffee-input-container {
     flex-direction: column;
     gap: 12px;
   }
   
-  .button-container {
+  .coffee-button-container {
     flex-direction: column;
     align-items: center;
   }
   
-  .reset-button {
+  .coffee-reset-button {
     width: 100%;
     max-width: 200px;
   }
@@ -281,7 +278,7 @@
     padding: 20px;
   }
   
-  .container {
+  .coffee-container {
     border-radius: 20px;
     overflow: hidden;
   }

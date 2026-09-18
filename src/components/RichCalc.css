@@ -1,11 +1,10 @@
-.container {
-  min-height: 100vh;
+.rich-container {
   background-color: #f8f9fa;
   display: flex;
   flex-direction: column;
   /* PC에서 모바일 화면처럼 보이게 하기 */
   box-sizing: border-box;
-  /* .App 이 flex 컨테이너라 width 를 주지 않으면 내용 폭에서 줄지 않아
+  /* .rich-App 이 flex 컨테이너라 width 를 주지 않으면 내용 폭에서 줄지 않아
      좁은 화면에서 가로 스크롤이 생긴다. */
   width: 100%;
   max-width: 414px;
@@ -14,17 +13,15 @@
   position: relative;
 }
 
-.scroll-container {
+.rich-scroll-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 16px;
-  min-height: calc(100vh - 100px);
+  padding: 32px 16px;
 }
 
-.title {
+.rich-title {
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 32px;
@@ -34,13 +31,13 @@
 }
 
 @media (max-width: 400px) {
-  .title {
+  .rich-title {
     font-size: 28px;
     margin-bottom: 24px;
   }
 }
 
-.input-container {
+.rich-input-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,14 +47,14 @@
   gap: 16px;
 }
 
-.input-label {
+.rich-input-label {
   font-size: 20px;
   font-weight: bold;
   color: #495057;
   text-align: center;
 }
 
-.amount-input-container {
+.rich-amount-input-container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -70,7 +67,7 @@
   max-width: 300px;
 }
 
-.amount-input-wrapper {
+.rich-amount-input-wrapper {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -79,7 +76,7 @@
   min-width: 120px;
 }
 
-.amount-input {
+.rich-amount-input {
   flex: 1;
   /* input 은 기본 고유 폭이 있어서 min-width 를 풀어주지 않으면
      좁은 화면에서 줄지 않고 넘친다. */
@@ -94,7 +91,7 @@
   font-weight: 600;
 }
 
-.amount-suffix {
+.rich-amount-suffix {
   font-size: 16px;
   color: #6c757d;
   font-weight: 600;
@@ -102,7 +99,7 @@
   min-width: 30px;
 }
 
-.amount-button {
+.rich-amount-button {
   padding: 16px;
   background-color: #e9ecef;
   border: none;
@@ -123,18 +120,18 @@
   touch-action: manipulation;
 }
 
-.amount-button:hover {
+.rich-amount-button:hover {
   background-color: #dee2e6;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-.amount-button:active {
+.rich-amount-button:active {
   transform: translateY(0);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.result-container {
+.rich-result-container {
   margin-top: 32px;
   display: flex;
   flex-direction: column;
@@ -142,7 +139,7 @@
   width: 100%;
 }
 
-.result-area {
+.rich-result-area {
   background-color: #f8f9fa;
   padding: 28px;
   border-radius: 20px;
@@ -153,7 +150,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.result-title {
+.rich-result-title {
   font-size: 24px;
   font-weight: bold;
   text-align: center;
@@ -161,7 +158,7 @@
   color: #495057;
 }
 
-.result {
+.rich-result {
   font-size: 20px;
   text-align: center;
   margin-bottom: 16px;
@@ -170,7 +167,7 @@
   font-weight: 500;
 }
 
-.button-container {
+.rich-button-container {
   display: flex;
   flex-direction: row;
   gap: 16px;
@@ -179,7 +176,7 @@
 }
 
 
-.reset-button {
+.rich-reset-button {
   background-color: #6c757d;
   padding: 18px 32px;
   border: none;
@@ -196,18 +193,18 @@
   touch-action: manipulation;
 }
 
-.reset-button:hover {
+.rich-reset-button:hover {
   background-color: #5a6268;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.reset-button:active {
+.rich-reset-button:active {
   transform: translateY(0);
   box-shadow: 0 2px 3.84px rgba(0, 0, 0, 0.25);
 }
 
-.calculate-button {
+.rich-calculate-button {
   background-color: #495057;
   padding: 20px 48px;
   border: none;
@@ -225,45 +222,45 @@
   touch-action: manipulation;
 }
 
-.calculate-button:hover {
+.rich-calculate-button:hover {
   background-color: #343a40;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.calculate-button:active {
+.rich-calculate-button:active {
   transform: translateY(0);
   box-shadow: 0 2px 3.84px rgba(0, 0, 0, 0.25);
 }
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
-  .container {
+  .rich-container {
     max-width: 100%;
     margin: 0;
     box-shadow: none;
   }
   
-  .scroll-container {
+  .rich-scroll-container {
     padding: 12px;
   }
   
-  .input-container {
+  .rich-input-container {
     flex-direction: column;
     gap: 12px;
   }
   
-  .input-label {
+  .rich-input-label {
     margin-right: 0;
     margin-bottom: 8px;
   }
   
-  .button-container {
+  .rich-button-container {
     flex-direction: column;
     align-items: center;
   }
   
-  .reset-button {
+  .rich-reset-button {
     width: 100%;
     max-width: 200px;
   }
@@ -277,7 +274,7 @@
     padding: 20px;
   }
   
-  .container {
+  .rich-container {
     border-radius: 20px;
     overflow: hidden;
   }
