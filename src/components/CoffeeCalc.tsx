@@ -72,7 +72,7 @@ const CoffeeCalc: React.FC = () => {
   const calculate = () => {
     const dailyCups = toNumber(coffeeCount);
     if (dailyCups <= 0) {
-      setError('하루에 몇 잔 마시는지 입력해주세요!');
+      setError('헉 커피를 안드시나봐요!!');
       setResult(null);
       return;
     }
@@ -90,7 +90,7 @@ const CoffeeCalc: React.FC = () => {
         shareLabel: '',
         sharePercent: '',
         days: '',
-        comment: '월급을 입력하면 연봉의 몇 %인지도 알려드려요 ☕',
+        comment: '아직 월급을 안받으셨나봐요!',
       });
       return;
     }
@@ -101,7 +101,7 @@ const CoffeeCalc: React.FC = () => {
     const days = yearlyCost / (yearlySalary / DAYS_PER_YEAR);
 
     let comment: string;
-    if (sharePercent >= 100) comment = '😵 월급보다 커피값이 많아요';
+    if (sharePercent >= 100) comment = '당신... 카페인 중독이신거에요???';
     else if (sharePercent >= 10) comment = '😱 사실상 고정지출이네요';
     else if (sharePercent >= 5) comment = '🥲 한 잔만 줄여도 달라져요';
     else if (sharePercent >= 2) comment = '☕ 이 정도면 국룰이죠';
@@ -112,9 +112,12 @@ const CoffeeCalc: React.FC = () => {
       headline,
       shareLabel: `내 연봉 ${Math.round(yearlySalary / 10000).toLocaleString()}만원의`,
       sharePercent: `${sharePercent.toFixed(1)}%`,
-      days: days >= 1
-        ? `1년 중 ${days >= 10 ? Math.round(days) : days.toFixed(1)}일은 커피값 벌려고 일한 셈이에요`
-        : '1년 중 하루치 일당도 안 되네요',
+      // 연봉을 통째로 넘기면 '1년 중 N일'이 성립하지 않으므로 햇수로 바꾼다.
+      days: days > DAYS_PER_YEAR
+        ? `커피값 벌려고 ${(days / DAYS_PER_YEAR).toFixed(1)}년을 일해야 해요`
+        : days >= 1
+          ? `1년 중 ${days >= 10 ? Math.round(days) : days.toFixed(1)}일은 커피값 벌려고 일한 셈이에요`
+          : '1년 중 하루치 일당도 안 되네요',
       comment,
     });
   };

@@ -2,6 +2,50 @@ import React, { useState } from 'react';
 import './RichCalc.css';
 import { targets } from '../data/targets';
 
+/**
+ * ▲▼ 버튼이 달린 금액 입력칸.
+ * 컴포넌트 밖에 두어야 한다. 안에서 정의하면 글자를 칠 때마다 다시
+ * 만들어지면서 입력칸이 통째로 교체돼 포커스가 빠진다.
+ */
+const AmountInputWithControls = ({
+  value,
+  onChangeText,
+  placeholder,
+}: {
+  value: string;
+  onChangeText: (text: string) => void;
+  placeholder: string;
+}) => {
+  // '만원' 단위를 떼고 숫자만 더한 뒤 다시 붙인다. 최소 0.
+  const adjust = (increment: number) => {
+    const current = parseFloat(value.replace('만원', '')) || 0;
+    onChangeText(`${Math.max(0, current + increment)}만원`);
+  };
+
+  return (
+    <div className="amount-input-container">
+      <button className="amount-button" onClick={() => adjust(50)} type="button">
+        ▲
+      </button>
+
+      <div className="amount-input-wrapper">
+        <input
+          className="amount-input"
+          placeholder={placeholder}
+          type="text"
+          inputMode="numeric"
+          onChange={(e) => onChangeText(`${e.target.value.replace(/[^0-9]/g, '')}만원`)}
+          value={value}
+        />
+      </div>
+
+      <button className="amount-button" onClick={() => adjust(-50)} type="button">
+        ▼
+      </button>
+    </div>
+  );
+};
+
 const RichCalc: React.FC = () => {
   const [salary, setSalary] = useState('100만원');
   const [result, setResult] = useState('');
@@ -48,68 +92,6 @@ const RichCalc: React.FC = () => {
     setResult('');
     setResult2('');
   };
-
-  // 금액 조절 함수들 (50만원씩)
-  const adjustAmount = (amountStr: string, increment: number, setter: (amount: string) => void) => {
-    try {
-      // '만원' 단위 제거하고 숫자만 추출
-      const currentAmount = parseFloat(amountStr.replace('만원', '')) || 0;
-      let newAmount = currentAmount + increment;
-      
-      // 최소값 0으로 제한
-      if (newAmount < 0) {
-        newAmount = 0;
-      }
-      
-      setter(newAmount.toString() + '만원');
-    } catch {
-      // 에러 발생시 기본값으로 설정
-      setter('100만원');
-    }
-  };
-
-  const AmountInputWithControls = ({ 
-    value, 
-    onChangeText, 
-    placeholder
-  }: { 
-    value: string; 
-    onChangeText: (text: string) => void; 
-    placeholder: string;
-  }) => (
-    <div className="amount-input-container">
-      <button 
-        className="amount-button" 
-        onClick={() => adjustAmount(value, 50, onChangeText)}
-        type="button"
-      >
-        ▲
-      </button>
-      
-      <div className="amount-input-wrapper">
-        <input
-          className="amount-input"
-          placeholder={placeholder}
-          type="text"
-          onChange={(e) => {
-            const inputValue = e.target.value;
-            // 숫자만 추출해서 만원 붙이기
-            const numbers = inputValue.replace(/[^0-9]/g, '');
-            onChangeText(numbers + '만원');
-          }}
-          value={value}
-        />
-      </div>
-      
-      <button 
-        className="amount-button" 
-        onClick={() => adjustAmount(value, -50, onChangeText)}
-        type="button"
-      >
-        ▼
-      </button>
-    </div>
-  );
 
   return (
     <div className="container">
