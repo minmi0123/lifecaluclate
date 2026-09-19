@@ -3,44 +3,60 @@
   "output": "public/data/salary-stats.json",
   "encoding": "utf8",
   "minSampleSize": 30,
-
   "columns": {
     "age": "AGE",
     "gender": "SEX",
-    "occupation": "OCC_CD",
+    "occupation": "OCC",
     "wage": "WAGE",
     "weight": "WGT"
   },
-
   "wageMultiplier": 10000,
-
   "ageBands": [
-    { "id": "20s", "min": 20, "max": 29 },
-    { "id": "30s", "min": 30, "max": 39 },
-    { "id": "40s", "min": 40, "max": 49 },
-    { "id": "50s", "min": 50, "max": 59 },
-    { "id": "60plus", "min": 60, "max": null }
+    {
+      "id": "20s",
+      "min": 20,
+      "max": 29
+    },
+    {
+      "id": "30s",
+      "min": 30,
+      "max": 39
+    },
+    {
+      "id": "40s",
+      "min": 40,
+      "max": 49
+    },
+    {
+      "id": "50s",
+      "min": 50,
+      "max": 59
+    },
+    {
+      "id": "60plus",
+      "min": 60,
+      "max": null
+    }
   ],
-
-  "genderMap": { "1": "male", "2": "female" },
-
+  "genderMap": {
+    "1": "male",
+    "2": "female"
+  },
   "occupationMap": {
     "1": "management",
-    "22": "it",
-    "23": "engineering",
-    "24": "health",
-    "25": "education",
+    "2": "professional",
     "3": "office",
-    "52": "sales",
     "4": "service",
-    "7": "production",
-    "8": "production"
+    "5": "sales",
+    "6": "agriculture",
+    "7": "craft",
+    "8": "machine",
+    "9": "labor"
   },
-
   "meta": {
     "surveyName": "경제활동인구조사 근로형태별 부가조사",
     "surveyPeriod": "2025년 8월",
-    "wageDefinition": "세전 월 임금(정액급여 + 초과급여, 상여금 제외)",
+    "wageDefinition": "최근 3개월간 평균 급여 (세전 여부는 조사표 확인 후 기재)",
     "sourceUrl": "https://mdis.mods.go.kr/"
   }
 }

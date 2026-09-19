@@ -19,17 +19,20 @@ export const GENDERS = [
   { id: 'female', label: '여성' },
 ];
 
+// 한국표준직업분류 8차 대분류. MDIS 공공용 자료가 대분류까지만 제공한다.
+// (중분류는 인가용에서만 제공돼 웹 공개와 맞지 않는다)
+// 코드 A(군인)는 2025년 8월 조사 응답이 0건이라 뺐다.
 export const OCCUPATIONS = [
   { id: 'all', label: '전체' },
   { id: 'management', label: '관리자' },
-  { id: 'it', label: 'IT · 정보통신 전문가' },
-  { id: 'engineering', label: '공학 전문가 · 기술직' },
-  { id: 'health', label: '보건 · 의료 · 복지' },
-  { id: 'education', label: '교육 전문가' },
+  { id: 'professional', label: '전문가 및 관련 종사자' },
   { id: 'office', label: '사무 종사자' },
-  { id: 'sales', label: '영업 · 판매' },
   { id: 'service', label: '서비스 종사자' },
-  { id: 'production', label: '기능원 · 장치 · 기계 조작' },
+  { id: 'sales', label: '판매 종사자' },
+  { id: 'agriculture', label: '농림어업 숙련 종사자' },
+  { id: 'craft', label: '기능원 및 관련 기능 종사자' },
+  { id: 'machine', label: '장치·기계 조작 및 조립 종사자' },
+  { id: 'labor', label: '단순 노무 종사자' },
 ];
 
 export const cellKey = (age, gender, occupation) => `${age}|${gender}|${occupation}`;

@@ -25,13 +25,13 @@ const BASE_MEDIAN = 3_200_000;
 const AGE_FACTOR = { all: 1.0, '20s': 0.72, '30s': 1.02, '40s': 1.18, '50s': 1.12, '60plus': 0.78 };
 const GENDER_FACTOR = { all: 1.0, male: 1.12, female: 0.82 };
 const OCCUPATION_FACTOR = {
-  all: 1.0, management: 1.75, it: 1.35, engineering: 1.25, health: 1.05,
-  education: 1.1, office: 1.05, sales: 0.92, service: 0.72, production: 0.95,
+  all: 1.0, management: 1.75, professional: 1.3, office: 1.1, service: 0.78,
+  sales: 0.9, agriculture: 0.72, craft: 0.98, machine: 0.95, labor: 0.62,
 };
 
 // 로그정규분포의 흩어진 정도. 클수록 같은 칸 안에서도 격차가 크다.
 const BASE_SIGMA = 0.42;
-const SIGMA_ADJUST = { management: 0.13, it: 0.06, service: -0.04, office: -0.05 };
+const SIGMA_ADJUST = { management: 0.13, professional: 0.08, office: -0.05, service: -0.04, labor: -0.08 };
 
 // '전체'로 묶인 축은 여러 집단이 섞이므로 분포가 더 넓어진다.
 const SIGMA_PER_ALL_AXIS = 0.05;
@@ -45,16 +45,25 @@ const WEIGHT_PER_SAMPLE = 260;
 const AGE_SHARE = { all: 1, '20s': 0.18, '30s': 0.24, '40s': 0.25, '50s': 0.22, '60plus': 0.11 };
 const GENDER_SHARE = { all: 1, male: 0.55, female: 0.45 };
 const OCCUPATION_SHARE = {
-  all: 1, management: 0.02, it: 0.05, engineering: 0.07, health: 0.09, education: 0.05,
-  office: 0.22, sales: 0.13, service: 0.17, production: 0.2,
+  all: 1, management: 0.013, professional: 0.196, office: 0.158, service: 0.129,
+  sales: 0.082, agriculture: 0.085, craft: 0.075, machine: 0.106, labor: 0.155,
 };
 
+// 위 구성비는 취업자 전체 기준이라 자영업자가 섞여 있다.
+// 우리는 임금을 응답한 임금근로자만 보므로, 자영업 비중이 큰 직종은 더 얇아진다.
+const WAGE_EARNER_RATE = { agriculture: 0.2, sales: 0.6, service: 0.8, management: 0.7 };
+
 // 특정 조합은 유난히 드물거나 흔하다(예: 60대 IT 개발자는 드물다).
-const OCCUPATION_BY_AGE = { it: { '20s': 1.4, '60plus': 0.15 }, management: { '20s': 0.05, '30s': 0.4 } };
+const OCCUPATION_BY_AGE = {
+  management: { '20s': 0.05, '30s': 0.4 },
+  professional: { '60plus': 0.4 },
+  agriculture: { '20s': 0.2, '60plus': 2.5 },
+  labor: { '20s': 0.7, '60plus': 2.0 },
+};
 const OCCUPATION_BY_GENDER = {
-  it: { female: 0.35 }, management: { female: 0.3 }, engineering: { female: 0.3 },
-  production: { female: 0.25 }, health: { female: 2.0 }, education: { female: 1.6 },
-  service: { female: 1.5 },
+  management: { female: 0.3 }, office: { female: 1.2 }, service: { female: 1.6 },
+  sales: { female: 1.1 }, agriculture: { female: 0.8 }, craft: { female: 0.2 },
+  machine: { female: 0.25 }, labor: { female: 1.2 },
 };
 
 /** 결정적 난수 — 실행할 때마다 같은 샘플이 나오도록 고정 시드를 쓴다. */
@@ -71,7 +80,8 @@ function sampleSizeFor(age, gender, occupation) {
   const interaction =
     (OCCUPATION_BY_AGE[occupation]?.[age] ?? 1) * (OCCUPATION_BY_GENDER[occupation]?.[gender] ?? 1);
   const n =
-    BASE_SAMPLE * AGE_SHARE[age] * GENDER_SHARE[gender] * OCCUPATION_SHARE[occupation] * interaction;
+    BASE_SAMPLE * AGE_SHARE[age] * GENDER_SHARE[gender] * OCCUPATION_SHARE[occupation] *
+    (WAGE_EARNER_RATE[occupation] ?? 1) * interaction;
   // 같은 구성비라도 조합마다 들쭉날쭉하므로 0.7~1.3배로 흔든다.
   return Math.max(1, Math.round(n * (0.7 + rng() * 0.6)));
 }
