@@ -77,24 +77,34 @@ export interface HistogramBin {
 }
 
 /**
- * 분위수 배열을 막대그래프용 구간으로 바꾼다.
- * 이웃한 분위수 사이의 비율을 금액 폭으로 나누면 그 구간의 밀도가 된다.
+ * 분위수 곡선을 막대그래프용 구간으로 바꾼다.
+ *
+ * 분위수 간격을 그대로 막대로 쓰면 안 된다. 실제 응답은 300만원 같은
+ * 반올림 값에 몰려서, 어떤 구간은 금액 폭이 몇 만원밖에 안 된다.
+ * 그 구간의 밀도가 치솟아 막대 하나만 남고 나머지가 납작해진다.
+ *
+ * 그래서 금액을 등간격으로 자르고, 각 구간에 몇 %가 들어가는지를 센다.
+ * 폭이 같으므로 막대 높이는 그대로 비율이 된다.
  */
-export function toHistogram(cell: SalaryCell, points: number[]): HistogramBin[] {
+export function toHistogram(cell: SalaryCell, points: number[], binCount = 24): HistogramBin[] {
+  const q = cell.percentiles;
+  if (q.length < 2) return [];
+
+  const lo = q[0];
+  const hi = q[q.length - 1];
+  const width = (hi - lo) / binCount;
+  if (width <= 0) return [];
+
   const bins: HistogramBin[] = [];
-  for (let i = 1; i < cell.percentiles.length; i += 1) {
-    const from = cell.percentiles[i - 1];
-    const to = cell.percentiles[i];
-    const share = points[i] - points[i - 1];
-    const width = to - from;
-    bins.push({
-      from,
-      to,
-      share,
-      density: width > 0 ? share / width : 0,
-      fromPercentile: points[i - 1],
-      toPercentile: points[i],
-    });
+  let fromPercentile = percentileOfWage(cell, points, lo).percentile;
+
+  for (let i = 0; i < binCount; i += 1) {
+    const from = lo + width * i;
+    const to = from + width;
+    const toPercentile = percentileOfWage(cell, points, to).percentile;
+    const share = Math.max(0, toPercentile - fromPercentile);
+    bins.push({ from, to, share, density: share / width, fromPercentile, toPercentile });
+    fromPercentile = toPercentile;
   }
   return bins;
 }

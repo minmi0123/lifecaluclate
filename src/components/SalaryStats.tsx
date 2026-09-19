@@ -117,7 +117,7 @@ const SalaryStats: React.FC = () => {
     return PLOT.left + ratio * (PLOT.right - PLOT.left);
   };
 
-  const maxDensity = analysis ? Math.max(...analysis.bins.map((b) => b.density)) : 0;
+  const maxShare = analysis ? Math.max(...analysis.bins.map((b) => b.share)) : 0;
   const markerX = analysis ? scaleX(wage) : 0;
   const topPercent = analysis ? Math.min(99, Math.max(1, Math.round(100 - analysis.percentile))) : 0;
 
@@ -212,9 +212,11 @@ const SalaryStats: React.FC = () => {
               </strong>
               <span className="ss-headline-sub">
                 이 조합의 중앙값은 {formatManwon(cell.median)} ·{' '}
-                {wage >= cell.median
-                  ? `내가 ${formatManwon(wage - cell.median)} 많아요`
-                  : `내가 ${formatManwon(cell.median - wage)} 적어요`}
+                {Math.round((wage - cell.median) / 10000) === 0
+                  ? '중앙값과 비슷해요'
+                  : wage > cell.median
+                    ? `내가 ${formatManwon(wage - cell.median)} 많아요`
+                    : `내가 ${formatManwon(cell.median - wage)} 적어요`}
               </span>
             </div>
 
@@ -228,7 +230,7 @@ const SalaryStats: React.FC = () => {
 
             <figure className="ss-figure">
               <figcaption className="ss-figure-title">
-                {describe(used)}의 월급 분포
+                월급 분포
                 <span className="ss-figure-note">표본 {cell.n.toLocaleString()}명</span>
               </figcaption>
 
@@ -246,11 +248,11 @@ const SalaryStats: React.FC = () => {
                 {analysis.bins.map((bin, i) => {
                   const x = scaleX(bin.from);
                   const w = Math.max(1, scaleX(bin.to) - x - 2);
-                  const h = maxDensity > 0 ? (bin.density / maxDensity) * PLOT_H : 0;
+                  const h = maxShare > 0 ? (bin.share / maxShare) * PLOT_H : 0;
                   const y = PLOT.bottom - h;
                   const isMine = wage >= bin.from && wage < bin.to;
                   return (
-                    <g key={bin.fromPercentile}>
+                    <g key={bin.from}>
                       <path
                         className={`ss-bar ${isMine ? 'ss-bar-mine' : ''}`}
                         d={barPath(x, y, w, Math.max(h, 1), 4)}
@@ -265,7 +267,7 @@ const SalaryStats: React.FC = () => {
                         onBlur={() => setHoveredBin(null)}
                         tabIndex={0}
                         role="button"
-                        aria-label={`상위 ${100 - bin.toPercentile}~${100 - bin.fromPercentile}% 구간, ${formatManwon(bin.from)}부터 ${formatManwon(bin.to)}`}
+                        aria-label={`상위 ${Math.round(100 - bin.toPercentile)}~${Math.round(100 - bin.fromPercentile)}% 구간, ${formatManwon(bin.from)}부터 ${formatManwon(bin.to)}`}
                       />
                     </g>
                   );
@@ -286,16 +288,11 @@ const SalaryStats: React.FC = () => {
                 <text className="ss-axis-label" x={PLOT.right} y={PLOT.bottom + 16} textAnchor="end">
                   {formatManwon(analysis.domainMax)}
                 </text>
-                {scaleX(cell.median) > PLOT.left + 64 && scaleX(cell.median) < PLOT.right - 64 && (
-                  <text className="ss-axis-label" x={scaleX(cell.median)} y={PLOT.bottom + 16} textAnchor="middle">
-                    중앙값 {formatManwon(cell.median)}
-                  </text>
-                )}
               </svg>
 
               <p className="ss-readout">
                 {hovered
-                  ? `상위 ${100 - hovered.toPercentile}~${100 - hovered.fromPercentile}% · ${formatManwon(hovered.from)} ~ ${formatManwon(hovered.to)}`
+                  ? `${formatManwon(hovered.from)} ~ ${formatManwon(hovered.to)} · 상위 ${Math.round(100 - hovered.toPercentile)}~${Math.round(100 - hovered.fromPercentile)}%`
                   : '막대를 짚으면 그 구간의 금액대를 볼 수 있어요'}
               </p>
             </figure>

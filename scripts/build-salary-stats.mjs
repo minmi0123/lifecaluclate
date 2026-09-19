@@ -66,7 +66,10 @@ function main() {
   const { columns, ageBands, genderMap, occupationMap, wageMultiplier = 1, meta = {} } = config;
   const filters = config.filters ?? {};
 
-  const raw = readFileSync(resolve(ROOT, config.input), config.encoding ?? 'utf8');
+  // MDIS CSV 는 EUC-KR 로 내려온다. readFileSync 는 그 인코딩을 모르므로
+  // 바이트로 읽어 TextDecoder 에 맡긴다.
+  const bytes = readFileSync(resolve(ROOT, config.input));
+  const raw = new TextDecoder(config.encoding ?? 'euc-kr').decode(bytes);
   const records = parseCsv(raw);
   console.log(`원자료 ${records.length.toLocaleString()}행 읽음`);
 
