@@ -4,11 +4,14 @@
   "encoding": "utf8",
   "minSampleSize": 30,
   "columns": {
-    "age": "AGE",
-    "gender": "SEX",
-    "occupation": "OCC",
-    "wage": "WAGE",
-    "weight": "WGT"
+    "age": "만연령",
+    "gender": "성별코드",
+    "occupation": "현재일관련사항_8차직업대분류코드",
+    "wage": "최근3개월간평균급여",
+    "weight": "가중값",
+    "weeklyHours": "평소1주근로시간수",
+    "employmentStatus": "현재일관련사항_종사상지위코드",
+    "salaryType": "급여형태코드"
   },
   "wageMultiplier": 10000,
   "ageBands": [
@@ -58,5 +61,10 @@
     "surveyPeriod": "2025년 8월",
     "wageDefinition": "최근 3개월간 평균 급여 (세전 여부는 조사표 확인 후 기재)",
     "sourceUrl": "https://mdis.mods.go.kr/"
+  },
+  "filters": {
+    "minWeeklyHours": null,
+    "employmentStatus": null,
+    "salaryType": null
   }
 }

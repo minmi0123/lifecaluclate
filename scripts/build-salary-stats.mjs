@@ -64,6 +64,7 @@ function main() {
   }
   const config = JSON.parse(readFileSync(resolve(ROOT, configPath), 'utf8'));
   const { columns, ageBands, genderMap, occupationMap, wageMultiplier = 1, meta = {} } = config;
+  const filters = config.filters ?? {};
 
   const raw = readFileSync(resolve(ROOT, config.input), config.encoding ?? 'utf8');
   const records = parseCsv(raw);
@@ -72,6 +73,11 @@ function main() {
   // 조합별로 응답을 모은다. 'all'은 별도 집계가 아니라 같은 응답을 한 번 더 담는 것.
   const buckets = new Map();
   const skipped = { wage: 0, age: 0, gender: 0, occupation: 0 };
+  // 선택 필터가 걸러낸 행 수. 실제 데이터에서 필터가 먹히는지 보려고 센다.
+  const filtered = { hours: 0, employmentStatus: 0, salaryType: 0 };
+  // 코드값 분포 — 코드북과 대조해 매핑이 맞는지 확인용.
+  const seen = { occupation: new Map(), gender: new Map(), employmentStatus: new Map(), salaryType: new Map() };
+  const bump = (map, key) => map.set(key, (map.get(key) ?? 0) + 1);
 
   for (const rec of records) {
     const wage = Number(rec[columns.wage]) * wageMultiplier;
@@ -80,6 +86,26 @@ function main() {
     const weight = columns.weight ? Number(rec[columns.weight]) : 1;
     if (!Number.isFinite(weight) || weight <= 0) { skipped.wage += 1; continue; }
 
+    // ── 선택 필터 ── 설정에 없으면 건너뛴다.
+    if (filters.minWeeklyHours != null && columns.weeklyHours) {
+      const hours = Number(rec[columns.weeklyHours]);
+      if (!Number.isFinite(hours) || hours < filters.minWeeklyHours) { filtered.hours += 1; continue; }
+    }
+    if (columns.employmentStatus) {
+      const status = String(rec[columns.employmentStatus]).trim();
+      bump(seen.employmentStatus, status);
+      if (filters.employmentStatus && !filters.employmentStatus.includes(status)) {
+        filtered.employmentStatus += 1; continue;
+      }
+    }
+    if (columns.salaryType) {
+      const type = String(rec[columns.salaryType]).trim();
+      bump(seen.salaryType, type);
+      if (filters.salaryType && !filters.salaryType.includes(type)) {
+        filtered.salaryType += 1; continue;
+      }
+    }
+
     const age = toAgeBand(rec[columns.age], ageBands);
     if (!age) { skipped.age += 1; continue; }
 
@@ -87,6 +113,8 @@ function main() {
     if (!gender) { skipped.gender += 1; continue; }
 
     // 매핑에 없는 직종 코드는 버리지 않고 '전체'에만 반영한다.
+    bump(seen.occupation, String(rec[columns.occupation]).trim());
+    bump(seen.gender, String(rec[columns.gender]).trim());
     const occupation = occupationMap[String(rec[columns.occupation]).trim()] ?? null;
     if (!occupation) skipped.occupation += 1;
 
@@ -138,6 +166,21 @@ function main() {
   console.log(`  조합 ${Object.keys(cells).length}개`);
   console.log(`  제외 — 임금/가중값 이상 ${skipped.wage}, 나이 ${skipped.age}, 성별 ${skipped.gender}`);
   console.log(`  직종 코드 미매핑 ${skipped.occupation}행은 '전체'에만 반영됨`);
+  if (filters.minWeeklyHours != null) console.log(`  주 ${filters.minWeeklyHours}시간 미만 제외 ${filtered.hours}행`);
+  if (filters.employmentStatus) console.log(`  종사상지위 필터 제외 ${filtered.employmentStatus}행`);
+  if (filters.salaryType) console.log(`  급여형태 필터 제외 ${filtered.salaryType}행`);
+
+  // 코드 분포 — 코드북과 대조해 매핑이 맞는지 눈으로 확인한다.
+  const show = (label, map) => {
+    const rows = [...map].sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}:${v}`);
+    console.log(`  [${label}] ${rows.join('  ')}`);
+  };
+  console.log('\n집계에 들어간 응답의 코드 분포:');
+  show('성별', seen.gender);
+  show('직업대분류', seen.occupation);
+  if (seen.employmentStatus.size) show('종사상지위', seen.employmentStatus);
+  if (seen.salaryType.size) show('급여형태', seen.salaryType);
+  console.log('  (코드북과 대조해 매핑이 맞는지 확인하세요)');
 
   const missing = [];
   for (const a of AGE_BANDS) for (const g of GENDERS) for (const o of OCCUPATIONS) {
