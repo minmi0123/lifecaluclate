@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 import { PERCENTILE_POINTS, normInv } from './lib/stats.mjs';
 import { AGE_BANDS, GENDERS, OCCUPATIONS, cellKey } from './lib/dimensions.mjs';
 
-const OUT_PATH = resolve(dirname(fileURLToPath(import.meta.url)), '../public/data/salary-stats.json');
+const OUT_PATH = resolve(dirname(fileURLToPath(import.meta.url)), '../src/data/salary-stats.json');
 
 // 전체 중위 월급(원). 여기에 아래 배수들을 곱해 조합별 중위값을 만든다.
 const BASE_MEDIAN = 3_200_000;

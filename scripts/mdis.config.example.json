@@ -1,6 +1,6 @@
 {
   "input": "raw/econ-active-2025-08.csv",
-  "output": "public/data/salary-stats.json",
+  "output": "src/data/salary-stats.json",
   "encoding": "euc-kr",
   "minSampleSize": 30,
   "columns": {

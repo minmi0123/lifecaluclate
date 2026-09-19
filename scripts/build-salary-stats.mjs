@@ -164,7 +164,7 @@ function main() {
     cells,
   };
 
-  const outPath = resolve(ROOT, config.output ?? 'public/data/salary-stats.json');
+  const outPath = resolve(ROOT, config.output ?? 'src/data/salary-stats.json');
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
 

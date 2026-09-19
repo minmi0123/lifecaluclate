@@ -1,10 +1,13 @@
+// ?url 로 불러오면 번들러가 내용 해시가 붙은 파일명으로 내보낸다.
+// public/ 에 두면 경로가 고정이라, 데이터를 갱신해도 브라우저가 옛 파일을 계속 쓴다.
+import datasetUrl from '../data/salary-stats.json?url';
 import type { ResolvedCell, SalaryCell, SalaryDataset, Selection } from '../types/salary';
 
 const cellKey = (age: string, gender: string, occupation: string) => `${age}|${gender}|${occupation}`;
 
 /** JSON 하나만 읽는다. 외부 API를 부르지 않으므로 CORS·API 키 문제가 없다. */
 export async function loadSalaryStats(signal?: AbortSignal): Promise<SalaryDataset> {
-  const response = await fetch(`${import.meta.env.BASE_URL}data/salary-stats.json`, { signal });
+  const response = await fetch(datasetUrl, { signal });
   if (!response.ok) {
     throw new Error(`월급 통계 데이터를 불러오지 못했습니다 (HTTP ${response.status})`);
   }

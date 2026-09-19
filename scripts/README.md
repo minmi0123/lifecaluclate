@@ -1,15 +1,19 @@
 # 월급 통계 데이터 만들기
 
-화면(`src/components/SalaryStats.tsx`)은 `public/data/salary-stats.json` 하나만 `fetch` 한다.
+화면(`src/components/SalaryStats.tsx`)은 `src/data/salary-stats.json` 하나만 `fetch` 한다.
 API를 직접 부르지 않으므로 CORS·API 키 노출·http 전용 API 문제가 없다.
 
+`public/` 이 아니라 `src/` 에 두고 `?url` 로 불러온다. 그래야 빌드할 때
+내용 해시가 붙은 파일명(`salary-stats-DKgWqfTY.json`)으로 나가고, 데이터를
+갱신하면 주소가 바뀌어 브라우저가 옛 파일을 계속 쓰는 일이 없다.
+
 ```
-MDIS 원자료(CSV) ──[build-salary-stats.mjs]──> public/data/salary-stats.json ──> 정적 페이지
+MDIS 원자료(CSV) ──[build-salary-stats.mjs]──> src/data/salary-stats.json ──> 정적 페이지
 ```
 
 ## 지금 들어있는 데이터
 
-**`public/data/salary-stats.json` 은 현재 샘플(가짜) 데이터다.**
+**`src/data/salary-stats.json` 은 현재 샘플(가짜) 데이터다.**
 `meta.isSample` 이 `true` 이고, 화면 맨 위에 경고 배너가 항상 떠 있다.
 
 ```bash

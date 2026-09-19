@@ -14,14 +14,14 @@
 
 ### ⚠️ 지금 들어있는 데이터는 샘플이다
 
-`public/data/salary-stats.json` 은 화면과 계산을 확인하려고 만든 **가짜 데이터**다.
+`src/data/salary-stats.json` 은 화면과 계산을 확인하려고 만든 **가짜 데이터**다.
 `meta.isSample` 이 `true` 인 동안 화면 맨 위에 경고 배너가 뜬다.
 실제 MDIS 원자료로 바꾸는 방법은 [`scripts/README.md`](scripts/README.md)에 있다.
 
 ### 구조
 
 ```
-MDIS 원자료(CSV) ──[scripts/build-salary-stats.mjs]──> public/data/salary-stats.json
+MDIS 원자료(CSV) ──[scripts/build-salary-stats.mjs]──> src/data/salary-stats.json
                                                               │
                                               정적 페이지가 이 JSON 하나만 fetch
 ```
