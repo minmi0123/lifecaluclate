@@ -64,6 +64,9 @@ function main() {
   }
   const config = JSON.parse(readFileSync(resolve(ROOT, configPath), 'utf8'));
   const { columns, ageBands, genderMap, occupationMap, wageMultiplier = 1, meta = {} } = config;
+  // MDIS 가중값은 소수점이 생략된 정수로 내려온다(경활조사는 3자리).
+  // 분위수는 가중값에 같은 배수를 곱해도 같지만, weightedN 을 실제 인원으로 만들려면 나눠야 한다.
+  const weightDivisor = config.weightDivisor ?? 1;
   const filters = config.filters ?? {};
 
   // MDIS CSV 는 EUC-KR 로 내려온다. readFileSync 는 그 인코딩을 모르므로
@@ -139,7 +142,7 @@ function main() {
     const percentiles = quantileCurve(rows).map((v) => Math.round(v / 1000) * 1000);
     cells[key] = {
       n: rows.length,
-      weightedN: Math.round(rows.reduce((sum, r) => sum + r.weight, 0)),
+      weightedN: Math.round(rows.reduce((sum, r) => sum + r.weight, 0) / weightDivisor),
       median: percentiles[PERCENTILE_POINTS.indexOf(50)],
       mean: Math.round(weightedMean(rows) / 1000) * 1000,
       percentiles,

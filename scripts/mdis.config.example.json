@@ -1,7 +1,7 @@
 {
   "input": "raw/econ-active-2025-08.csv",
   "output": "public/data/salary-stats.json",
-  "encoding": "utf8",
+  "encoding": "euc-kr",
   "minSampleSize": 30,
   "columns": {
     "age": "만연령",
@@ -9,7 +9,6 @@
     "occupation": "현재일관련사항_8차직업대분류코드",
     "wage": "최근3개월간평균급여",
     "weight": "가중값",
-    "weeklyHours": "평소1주근로시간수",
     "employmentStatus": "현재일관련사항_종사상지위코드",
     "salaryType": "급여형태코드"
   },
@@ -63,8 +62,10 @@
     "sourceUrl": "https://mdis.mods.go.kr/"
   },
   "filters": {
-    "minWeeklyHours": null,
-    "employmentStatus": null,
+    "employmentStatus": [
+      "1"
+    ],
     "salaryType": null
-  }
+  },
+  "weightDivisor": 1000
 }
