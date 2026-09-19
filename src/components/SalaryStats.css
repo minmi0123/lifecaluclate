@@ -378,3 +378,10 @@
     font-size: 34px;
   }
 }
+
+.ss-wage-shared {
+  margin: 0;
+  font-size: 12px;
+  color: var(--ss-bar-mine);
+  line-height: 1.4;
+}

@@ -7,6 +7,7 @@ import {
   resolveCell,
   toHistogram,
 } from '../lib/salaryStats';
+import { toWon } from '../lib/salaryInput';
 import type { SalaryDataset, Selection } from '../types/salary';
 
 // 그래프 좌표계. CSS로 가로만 늘리고 비율은 이 viewBox가 고정한다.
@@ -22,17 +23,13 @@ function barPath(x: number, y: number, w: number, h: number, r: number) {
     `L${x + w - radius},${y} Q${x + w},${y} ${x + w},${y + radius} L${x + w},${y + h} Z`;
 }
 
-/** "300만원" → 3000000. 숫자가 아니면 0. */
-function parseWage(text: string): number {
-  const digits = text.replace(/[^0-9]/g, '');
-  return digits === '' ? 0 : Number(digits) * 10000;
-}
-
-const SalaryStats: React.FC = () => {
+const SalaryStats: React.FC<{
+  salary: string;
+  onSalaryChange: (next: string) => void;
+}> = ({ salary, onSalaryChange }) => {
   const [dataset, setDataset] = useState<SalaryDataset | null>(null);
   const [loadError, setLoadError] = useState('');
   const [selection, setSelection] = useState<Selection>({ age: '30s', gender: 'all', occupation: 'all' });
-  const [salaryText, setSalaryText] = useState('300만원');
   const [hoveredBin, setHoveredBin] = useState<number | null>(null);
 
   useEffect(() => {
@@ -46,7 +43,7 @@ const SalaryStats: React.FC = () => {
     return () => controller.abort();
   }, []);
 
-  const wage = parseWage(salaryText);
+  const wage = toWon(salary);
 
   const resolved = useMemo(
     () => (dataset ? resolveCell(dataset, selection) : null),
@@ -81,15 +78,14 @@ const SalaryStats: React.FC = () => {
   };
 
   const adjustSalary = (step: number) => {
-    const next = Math.max(0, parseWage(salaryText) / 10000 + step);
-    setSalaryText(`${next}만원`);
+    onSalaryChange(`${Math.max(0, toWon(salary) / 10000 + step)}만원`);
   };
 
   if (loadError) {
     return (
       <div className="ss-container">
         <div className="ss-scroll">
-          <p className="ss-error">⚠️ {loadError}</p>
+          <p className="ss-error">{loadError}</p>
         </div>
       </div>
     );
@@ -188,13 +184,14 @@ const SalaryStats: React.FC = () => {
               className="ss-input"
               type="text"
               inputMode="numeric"
-              value={salaryText}
+              value={salary}
               aria-label="내 월급 (만원)"
-              onChange={(e) => setSalaryText(`${e.target.value.replace(/[^0-9]/g, '')}만원`)}
+              onChange={(e) => onSalaryChange(`${e.target.value.replace(/[^0-9]/g, '')}만원`)}
             />
             <button className="ss-step-button" type="button" onClick={() => adjustSalary(10)}>+</button>
           </div>
           <p className="ss-wage-definition">기준: {meta.wageDefinition}</p>
+          <p className="ss-wage-shared">여기 입력한 월급을 아래 부자 · 저축 · 커피에서도 그대로 씁니다.</p>
         </div>
 
         {!analysis ? (
@@ -320,7 +317,7 @@ const SalaryStats: React.FC = () => {
         )}
 
         <div className="ss-footnotes">
-          <p>🔒 입력한 월급은 브라우저 안에서만 계산해요. 서버로 보내거나 저장하지 않습니다.</p>
+          <p>입력한 월급은 브라우저 안에서만 계산해요. 서버로 보내거나 저장하지 않습니다.</p>
           <p>
             평균이 아니라 <strong>분위수</strong>로 보여줘요. 평균은 소수의 고소득자 때문에 위로 끌려가요.
           </p>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './CoffeeCalc.css';
+import { toWon } from '../lib/salaryInput';
 
 const COFFEE_PRICE = 3000; // 1잔 가격 고정 3천원
 const DAYS_PER_YEAR = 365;
@@ -63,8 +64,7 @@ interface CoffeeResult {
   comment: string;
 }
 
-const CoffeeCalc: React.FC = () => {
-  const [salary, setSalary] = useState('300만원');
+const CoffeeCalc: React.FC<{ salary: string }> = ({ salary }) => {
   const [coffeeCount, setCoffeeCount] = useState('1잔');
   const [result, setResult] = useState<CoffeeResult | null>(null);
   const [error, setError] = useState('');
@@ -81,7 +81,7 @@ const CoffeeCalc: React.FC = () => {
     const yearlyCost = yearlyCups * COFFEE_PRICE;
     const headline = `1년에 ${yearlyCups.toLocaleString()}잔 · ${Math.round(yearlyCost / 10000).toLocaleString()}만원`;
 
-    const monthlySalary = toNumber(salary) * 10000;
+    const monthlySalary = toWon(salary);
     if (monthlySalary <= 0) {
       // 월급 없이도 쓴 돈은 알려주고, 비율은 월급을 넣어야 나온다고 안내한다.
       setError('');
@@ -90,7 +90,7 @@ const CoffeeCalc: React.FC = () => {
         shareLabel: '',
         sharePercent: '',
         days: '',
-        comment: '아직 월급을 안받으셨나봐요!',
+        comment: '위 월급 칸에 월급을 입력해주세요.',
       });
       return;
     }
@@ -102,10 +102,10 @@ const CoffeeCalc: React.FC = () => {
 
     let comment: string;
     if (sharePercent >= 100) comment = '당신... 카페인 중독이신거에요???';
-    else if (sharePercent >= 10) comment = '😱 사실상 고정지출이네요';
-    else if (sharePercent >= 5) comment = '🥲 한 잔만 줄여도 달라져요';
-    else if (sharePercent >= 2) comment = '☕ 이 정도면 국룰이죠';
-    else comment = '👍 커피엔 꽤 절제하시네요';
+    else if (sharePercent >= 10) comment = '사실상 고정지출이네요';
+    else if (sharePercent >= 5) comment = '한 잔만 줄여도 달라져요';
+    else if (sharePercent >= 2) comment = '이 정도면 국룰이죠';
+    else comment = '커피엔 꽤 절제하시네요';
 
     setError('');
     setResult({
@@ -123,7 +123,6 @@ const CoffeeCalc: React.FC = () => {
   };
 
   const resetAll = () => {
-    setSalary('300만원');
     setCoffeeCount('1잔');
     setResult(null);
     setError('');
@@ -132,20 +131,19 @@ const CoffeeCalc: React.FC = () => {
   return (
     <div className="coffee-container">
       <div className="coffee-scroll-container">
-        <h1 className="coffee-title">☕ 커피값 계산기 ☕</h1>
+        <h1 className="coffee-title">커피값 계산기</h1>
+
+        <p className="coffee-salary-note">
+          {toWon(salary) > 0
+            ? <>월급 <strong>{salary}</strong> 기준</>
+            : '맨 위 월급 칸에 월급을 입력해주세요'}
+        </p>
 
         <div className="coffee-price-info">
           <div className="coffee-price-text">1잔 가격: 3,000원</div>
         </div>
 
         <div className="coffee-input-container">
-          <StepperInput
-            label="내 월급"
-            value={salary}
-            suffix="만원"
-            step={10}
-            onChange={setSalary}
-          />
           <StepperInput
             label="하루 커피"
             value={coffeeCount}
@@ -156,7 +154,7 @@ const CoffeeCalc: React.FC = () => {
         </div>
 
         <button className="coffee-calculate-button" onClick={calculate} type="button">
-          💰 계산하기
+          계산하기
         </button>
 
         {error && <div className="coffee-error">{error}</div>}
@@ -164,7 +162,7 @@ const CoffeeCalc: React.FC = () => {
         {result && (
           <div className="coffee-result-container">
             <div className="coffee-result-area">
-              <h2 className="coffee-result-title">📊 계산 결과</h2>
+              <h2 className="coffee-result-title">계산 결과</h2>
               <div className="coffee-result">{result.headline}</div>
               {result.sharePercent && (
                 <>
@@ -178,7 +176,7 @@ const CoffeeCalc: React.FC = () => {
 
             <div className="coffee-button-container">
               <button className="coffee-reset-button" onClick={resetAll} type="button">
-                🔄 초기화
+                초기화
               </button>
             </div>
           </div>

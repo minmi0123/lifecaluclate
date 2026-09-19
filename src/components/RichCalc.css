@@ -279,3 +279,16 @@
     overflow: hidden;
   }
 }
+
+/* 월급은 위 월급 구역에서 받는다. 여기서는 어떤 값을 쓰는지만 알린다. */
+.rich-salary-note {
+  margin: 0 0 24px;
+  font-size: 15px;
+  color: #6c757d;
+  text-align: center;
+}
+
+.rich-salary-note strong {
+  color: #212529;
+  font-size: 18px;
+}
