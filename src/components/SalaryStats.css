@@ -385,3 +385,80 @@
   color: var(--ss-bar-mine);
   line-height: 1.4;
 }
+
+/* ── 나이대별 추이 ── */
+.ss-trend-band {
+  opacity: 0.16;
+}
+
+.ss-trend-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.ss-trend-dot {
+  stroke: var(--ss-surface);
+  stroke-width: 2;
+}
+
+.ss-trend-me {
+  fill: var(--ss-marker);
+}
+
+.ss-trend-me-ring {
+  fill: var(--ss-surface);
+}
+
+.ss-trend-me,
+.ss-trend-me-ring {
+  pointer-events: none;
+}
+
+.ss-trend-me-label {
+  fill: var(--ss-marker);
+  font-size: 10px;
+  font-weight: bold;
+  font-family: inherit;
+  /* 선 위에 얹혀도 읽히도록 흰 테두리를 글자 뒤에 깐다. */
+  paint-order: stroke;
+  stroke: var(--ss-surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.ss-legend {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--ss-text-muted);
+  flex-shrink: 0;
+}
+
+.ss-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ss-legend-swatch {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.ss-figure-caption {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ss-text-muted);
+  text-align: center;
+}
+
+.ss-trend-crosshair {
+  stroke: var(--ss-border);
+  stroke-width: 1;
+}

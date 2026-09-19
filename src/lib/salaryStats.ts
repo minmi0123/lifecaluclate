@@ -112,6 +112,85 @@ export function toHistogram(cell: SalaryCell, points: number[], binCount = 24): 
   return bins;
 }
 
+export interface AgeTrendPoint {
+  ageId: string;
+  label: string;
+  /** 표본이 기준치보다 적으면 null. 선을 끊어 없는 값을 지어내지 않는다. */
+  median: number | null;
+  p25: number | null;
+  p75: number | null;
+  n: number;
+}
+
+export interface AgeTrendSeries {
+  genderId: string;
+  label: string;
+  points: AgeTrendPoint[];
+}
+
+export interface AgeTrend {
+  series: AgeTrendSeries[];
+  /** 한 선만 그릴 때만 25~75% 띠를 함께 그린다. 두 선이면 겹쳐서 읽기 어렵다. */
+  showBand: boolean;
+  /** 표본이 모자라 비워둔 점의 수. */
+  hiddenCount: number;
+  /** 그릴 점이 너무 적으면 그래프를 내보내지 않는다. */
+  drawable: boolean;
+}
+
+/**
+ * 나이대별 중위 월급 추이.
+ * 성별이 '전체'면 남녀 두 선을 그려 대비를 보여준다.
+ *
+ * 한 시점의 단면이지 같은 사람을 따라간 값이 아니다.
+ */
+export function buildAgeTrend(dataset: SalaryDataset, selection: Selection): AgeTrend {
+  const points = dataset.meta.percentilePoints;
+  const at = (cell: SalaryCell, p: number) => cell.percentiles[points.indexOf(p)] ?? null;
+
+  const genderIds = selection.gender === 'all' ? ['male', 'female'] : [selection.gender];
+  const ageBands = dataset.dimensions.age.filter((a) => a.id !== 'all');
+
+  let hiddenCount = 0;
+  let valid = 0;
+
+  const series = genderIds.map((genderId) => ({
+    genderId,
+    label: dataset.dimensions.gender.find((g) => g.id === genderId)?.label ?? genderId,
+    points: ageBands.map((band) => {
+      const cell = dataset.cells[cellKey(band.id, genderId, selection.occupation)];
+      // 넓히지 않는다. 다른 기준의 값을 한 선에 섞으면 추이가 아니게 된다.
+      if (!cell || cell.n < dataset.meta.minSampleSize) {
+        hiddenCount += 1;
+        return { ageId: band.id, label: band.label, median: null, p25: null, p75: null, n: cell?.n ?? 0 };
+      }
+      valid += 1;
+      return {
+        ageId: band.id,
+        label: band.label,
+        median: cell.median,
+        p25: at(cell, 25),
+        p75: at(cell, 75),
+        n: cell.n,
+      };
+    }),
+  }));
+
+  return { series, showBand: genderIds.length === 1, hiddenCount, drawable: valid >= 3 };
+}
+
+/** 값이 비어 있는 자리에서 끊어, 이어진 구간들로 나눈다. */
+export function splitRuns<T>(items: T[], hasValue: (item: T) => boolean): T[][] {
+  const runs: T[][] = [];
+  let current: T[] = [];
+  for (const item of items) {
+    if (hasValue(item)) current.push(item);
+    else if (current.length > 0) { runs.push(current); current = []; }
+  }
+  if (current.length > 0) runs.push(current);
+  return runs;
+}
+
 /** 원 단위를 "320만원" 처럼 읽기 좋게. */
 export function formatManwon(won: number): string {
   const manwon = Math.round(won / 10000);

@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './SalaryStats.css';
+import AgeTrendChart from './AgeTrendChart';
 import {
+  buildAgeTrend,
   formatManwon,
   loadSalaryStats,
   percentileOfWage,
@@ -47,6 +49,11 @@ const SalaryStats: React.FC<{
 
   const resolved = useMemo(
     () => (dataset ? resolveCell(dataset, selection) : null),
+    [dataset, selection],
+  );
+
+  const ageTrend = useMemo(
+    () => (dataset ? buildAgeTrend(dataset, selection) : null),
     [dataset, selection],
   );
 
@@ -294,6 +301,45 @@ const SalaryStats: React.FC<{
               </p>
             </figure>
 
+            {ageTrend && (
+              <figure className="ss-figure">
+                <figcaption className="ss-figure-title">
+                  지금 각 나이대가 받는 월급
+                  {ageTrend.series.length > 1 && (
+                    <span className="ss-legend">
+                      {ageTrend.series.map((series, i) => (
+                        <span key={series.genderId} className="ss-legend-item">
+                          <span
+                            className="ss-legend-swatch"
+                            style={{ backgroundColor: i === 0 ? '#2a78d6' : '#eb6834' }}
+                          />
+                          {series.label}
+                        </span>
+                      ))}
+                    </span>
+                  )}
+                </figcaption>
+
+                {ageTrend.drawable ? (
+                  <AgeTrendChart
+                    trend={ageTrend}
+                    wage={wage}
+                    myAgeId={selection.age}
+                    groupLabel={describe({ ...selection, age: 'all' })}
+                  />
+                ) : (
+                  <p className="ss-readout">
+                    이 조합은 표본이 적어 나이대별 추이를 그리지 않았어요.
+                  </p>
+                )}
+
+                <p className="ss-figure-caption">
+                  {dataset.meta.surveyPeriod} 시점의 나이대별 값이에요.
+                  {ageTrend.hiddenCount > 0 && ` 표본이 ${meta.minSampleSize}명보다 적은 나이대는 비워 뒀어요.`}
+                </p>
+              </figure>
+            )}
+
             <details className="ss-table-toggle">
               <summary>분위수 표로 보기</summary>
               <table className="ss-table">
@@ -313,6 +359,37 @@ const SalaryStats: React.FC<{
                 </tbody>
               </table>
             </details>
+
+            {ageTrend?.drawable && (
+              <details className="ss-table-toggle">
+                <summary>나이대별 표로 보기</summary>
+                <table className="ss-table">
+                  <thead>
+                    <tr>
+                      <th>나이대</th>
+                      {ageTrend.series.map((series) => (
+                        <th key={series.genderId}>{series.label} 중위</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ageTrend.series[0].points.map((point, i) => (
+                      <tr key={point.ageId}>
+                        <th scope="row">{point.label}</th>
+                        {ageTrend.series.map((series) => {
+                          const cell = series.points[i];
+                          return (
+                            <td key={series.genderId}>
+                              {cell.median == null ? '표본 부족' : formatManwon(cell.median)}
+                            </td>
+                          );
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </details>
+            )}
           </>
         )}
 
