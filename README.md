@@ -12,11 +12,23 @@
   (30대 + 여성 + IT 에서 표본이 모자라면 30대 + IT 로)
 - 회사별 연봉 추정은 **하지 않는다**.
 
-### ⚠️ 지금 들어있는 데이터는 샘플이다
+### 데이터 — 실제 원자료 (2026-09-19 교체 완료)
 
-`src/data/salary-stats.json` 은 화면과 계산을 확인하려고 만든 **가짜 데이터**다.
-`meta.isSample` 이 `true` 인 동안 화면 맨 위에 경고 배너가 뜬다.
-실제 MDIS 원자료로 바꾸는 방법은 [`scripts/README.md`](scripts/README.md)에 있다.
+`src/data/salary-stats.json` 은 **MDIS 원자료로 만든 실제 통계**다.
+
+| 항목 | 값 |
+|---|---|
+| 원자료 | 경제활동인구조사 근로형태별 부가조사 |
+| 조사 시점 | 2025년 8월 |
+| 임금 정의 | 최근 3개월간 평균 급여 · 상용근로자 기준 |
+| 출처 | https://mdis.mods.go.kr/ |
+| 생성일 | 2026-09-19 |
+
+`meta.isSample` 이 `false` 라서 샘플 경고 배너는 뜨지 않는다.
+이 값이 `true` 면(= 샘플 데이터면) 화면 맨 위에 경고 배너가 뜬다 — 배포 전에 확인할 것.
+
+원자료를 다시 만드는 방법은 [`scripts/README.md`](scripts/README.md)에 있다.
+`npm run data:sample` 로 만든 샘플로 되돌리면 `isSample` 이 다시 `true` 가 된다.
 
 ### 구조
 

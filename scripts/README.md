@@ -13,11 +13,15 @@ MDIS 원자료(CSV) ──[build-salary-stats.mjs]──> src/data/salary-stats.
 
 ## 지금 들어있는 데이터
 
-**`src/data/salary-stats.json` 은 현재 샘플(가짜) 데이터다.**
-`meta.isSample` 이 `true` 이고, 화면 맨 위에 경고 배너가 항상 떠 있다.
+**`src/data/salary-stats.json` 은 실제 원자료로 만든 것이다** (2026-09-19 교체).
+경제활동인구조사 근로형태별 부가조사 2025년 8월, 상용근로자 기준.
+`meta.isSample` 이 `false` 라 샘플 경고 배너는 뜨지 않는다.
+
+아래 절차는 **원자료를 새 시점으로 갱신할 때** 다시 쓴다.
 
 ```bash
-node scripts/make-sample-data.mjs   # 샘플 다시 만들기 (고정 시드라 결과가 같음)
+node scripts/make-sample-data.mjs   # 샘플로 되돌리기 (고정 시드라 결과가 같음)
+                                    # 실행하면 isSample 이 true 가 되고 배너가 다시 뜬다
 ```
 
 ## 실제 데이터로 바꾸기
