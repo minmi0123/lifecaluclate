@@ -25,7 +25,7 @@
   font-size: 32px;
   font-weight: bold;
   margin-bottom: 32px;
-  color: #8B4513;
+  color: #495057;
   text-align: center;
   padding: 0 16px;
 }
@@ -38,20 +38,20 @@
 }
 
 .coffee-price-info {
-  background-color: #fff3cd;
+  background-color: #e7f1ff;
   padding: 20px;
   border-radius: 16px;
   margin-bottom: 32px;
-  border: 2px solid #ffeaa7;
+  border: 2px solid #b6d4fe;
   width: 100%;
   max-width: 350px;
-  box-shadow: 0 4px 12px rgba(255, 234, 167, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 .coffee-price-text {
   font-size: 20px;
   font-weight: bold;
-  color: #856404;
+  color: #084298;
   text-align: center;
 }
 
@@ -142,7 +142,7 @@
 }
 
 .coffee-calculate-button {
-  background-color: #8B4513;
+  background-color: #495057;
   padding: 20px 48px;
   border: none;
   border-radius: 16px;
@@ -154,20 +154,20 @@
   margin-bottom: 32px;
   min-width: 240px;
   min-height: 60px;
-  box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
   transition: all 0.2s ease;
   touch-action: manipulation;
 }
 
 .coffee-calculate-button:hover {
-  background-color: #6d3410;
+  background-color: #343a40;
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(139, 69, 19, 0.4);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .coffee-calculate-button:active {
   transform: translateY(0);
-  box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
 }
 
 .coffee-result-container {
@@ -309,7 +309,7 @@
 .coffee-share {
   font-size: 40px;
   font-weight: bold;
-  color: #8B4513;
+  color: #184f95;
   text-align: center;
   line-height: 1.2;
   margin-bottom: 16px;
@@ -317,8 +317,8 @@
 
 .coffee-days {
   font-weight: 600;
-  color: #664d03;
-  background-color: #fff3cd;
+  color: #084298;
+  background-color: #e7f1ff;
   border-radius: 12px;
   padding: 10px 12px;
 }
