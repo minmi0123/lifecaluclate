@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './SavingsCalc.css';
 import { toWon } from '../lib/salaryInput';
+import { formatManwon } from '../lib/salaryStats';
 
 /**
  * ▲▼ 버튼이 달린 금액 입력칸. 단위(만원/억원)와 증감폭을 받는다.
@@ -49,14 +50,14 @@ const AmountInputWithControls = ({
 
 const SavingsCalc: React.FC<{ salary: string }> = ({ salary }) => {
   const [savings, setSavings] = useState('50만원');
-  const [target, setTarget] = useState('1억원');
+  const [target, setTarget] = useState('10000만원');
   const [result, setResult] = useState('');
   const [result2, setResult2] = useState('');
 
   const calculate = () => {
     const salaryNum = toWon(salary);
     const savingsNum = toWon(savings);
-    const targetNum = (parseFloat(target.replace('억원', '')) || 0) * 100000000;
+    const targetNum = toWon(target);
 
     if (salaryNum <= 0) {
       setResult('위 월급 칸에 월급을 입력해주세요.');
@@ -84,7 +85,7 @@ const SavingsCalc: React.FC<{ salary: string }> = ({ salary }) => {
 
     let resultText = `월급: ${salary}\n`;
     resultText += `저축: ${savings} → 저축률 ${savingsRate.toFixed(1)}%\n\n`;
-    resultText += `목표 금액: ${target}\n`;
+    resultText += `목표 금액: ${formatManwon(targetNum)}\n`;
     resultText += `도달까지: 약 ${Math.ceil(months)}개월 (${years}년 ${remainingMonths}개월)\n\n`;
     resultText += `목표 달성 예상일: ${targetDate.getFullYear()}년 ${targetDate.getMonth() + 1}월`;
 
@@ -98,7 +99,7 @@ const SavingsCalc: React.FC<{ salary: string }> = ({ salary }) => {
 
   const resetAll = () => {
     setSavings('50만원');
-    setTarget('1억원');
+    setTarget('10000만원');
     setResult('');
     setResult2('');
   };
@@ -121,7 +122,9 @@ const SavingsCalc: React.FC<{ salary: string }> = ({ salary }) => {
 
         <div className="savings-input-container">
           <label className="savings-input-label">목표:</label>
-          <AmountInputWithControls value={target} onChangeText={setTarget} increment={1} unit="억원" />
+          <AmountInputWithControls value={target} onChangeText={setTarget} increment={1000} unit="만원" />
+          {/* 10000만원이 한눈에 1억으로 안 읽혀서 환산해 보여준다. */}
+          <p className="savings-amount-hint">= {formatManwon(toWon(target))}</p>
         </div>
 
         <button className="savings-calculate-button" onClick={calculate} type="button">

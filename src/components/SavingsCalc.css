@@ -290,3 +290,9 @@
   color: #212529;
   font-size: 18px;
 }
+
+.savings-amount-hint {
+  margin: 0;
+  font-size: 13px;
+  color: #6c757d;
+}
