@@ -80,9 +80,9 @@ function main() {
   const buckets = new Map();
   const skipped = { wage: 0, age: 0, gender: 0, occupation: 0 };
   // 선택 필터가 걸러낸 행 수. 실제 데이터에서 필터가 먹히는지 보려고 센다.
-  const filtered = { hours: 0, employmentStatus: 0, salaryType: 0 };
+  const filtered = { hours: 0, employmentStatus: 0, salaryType: 0, workTimeType: 0 };
   // 코드값 분포 — 코드북과 대조해 매핑이 맞는지 확인용.
-  const seen = { occupation: new Map(), gender: new Map(), employmentStatus: new Map(), salaryType: new Map() };
+  const seen = { occupation: new Map(), gender: new Map(), employmentStatus: new Map(), salaryType: new Map(), workTimeType: new Map() };
   const bump = (map, key) => map.set(key, (map.get(key) ?? 0) + 1);
 
   for (const rec of records) {
@@ -109,6 +109,16 @@ function main() {
       bump(seen.salaryType, type);
       if (filters.salaryType && !filters.salaryType.includes(type)) {
         filtered.salaryType += 1; continue;
+      }
+    }
+    // 전일제/시간제. 시간제가 섞이면 "적게 일해서 적게 받는" 사람이 분포를 끌어내린다.
+    // 2025년 자료의 `평소1주근로시간수` 는 임금과 같이 채워지지 않아 쓸 수 없었고,
+    // 대신 이 변수가 임금 보유 행 전부에 채워져 있다.
+    if (columns.workTimeType) {
+      const workTime = String(rec[columns.workTimeType]).trim();
+      bump(seen.workTimeType, workTime);
+      if (filters.workTimeType && !filters.workTimeType.includes(workTime)) {
+        filtered.workTimeType += 1; continue;
       }
     }
 
@@ -175,6 +185,7 @@ function main() {
   if (filters.minWeeklyHours != null) console.log(`  주 ${filters.minWeeklyHours}시간 미만 제외 ${filtered.hours}행`);
   if (filters.employmentStatus) console.log(`  종사상지위 필터 제외 ${filtered.employmentStatus}행`);
   if (filters.salaryType) console.log(`  급여형태 필터 제외 ${filtered.salaryType}행`);
+  if (filters.workTimeType) console.log(`  근로시간형태 필터 제외 ${filtered.workTimeType}행`);
 
   // 코드 분포 — 코드북과 대조해 매핑이 맞는지 눈으로 확인한다.
   const show = (label, map) => {
@@ -186,6 +197,7 @@ function main() {
   show('직업대분류', seen.occupation);
   if (seen.employmentStatus.size) show('종사상지위', seen.employmentStatus);
   if (seen.salaryType.size) show('급여형태', seen.salaryType);
+  if (seen.workTimeType.size) show('근로시간형태', seen.workTimeType);
   console.log('  (코드북과 대조해 매핑이 맞는지 확인하세요)');
 
   const missing = [];

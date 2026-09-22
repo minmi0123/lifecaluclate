@@ -27,3 +27,10 @@ dist-ssr
 # MDIS 원자료 (용량이 크고 배포에 불필요)
 raw/
 scripts/mdis.config.json
+
+# MDIS 파일설계서 · 코드집 (배포 불필요)
+*.xlsx
+
+# 내려받은 원자료 압축본 · 작업용 임시 폴더
+임시/
+*.zip

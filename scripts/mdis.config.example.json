@@ -1,5 +1,5 @@
 {
-  "input": "raw/econ-active-2025-08.csv",
+  "input": "raw/2025_8월_근로형태별_20260922_65054.csv",
   "output": "src/data/salary-stats.json",
   "encoding": "euc-kr",
   "minSampleSize": 30,
@@ -10,7 +10,8 @@
     "wage": "최근3개월간평균급여",
     "weight": "가중값",
     "employmentStatus": "현재일관련사항_종사상지위코드",
-    "salaryType": "급여형태코드"
+    "salaryType": "급여형태코드",
+    "workTimeType": "근로시간형태코드"
   },
   "wageMultiplier": 10000,
   "ageBands": [
@@ -58,14 +59,17 @@
   "meta": {
     "surveyName": "경제활동인구조사 근로형태별 부가조사",
     "surveyPeriod": "2025년 8월",
-    "wageDefinition": "최근 3개월간 평균 급여 (세전 여부는 조사표 확인 후 기재)",
+    "wageDefinition": "최근 3개월간 평균 급여 · 상용근로자 · 전일제 기준",
     "sourceUrl": "https://mdis.mods.go.kr/"
   },
   "filters": {
     "employmentStatus": [
       "1"
     ],
-    "salaryType": null
+    "salaryType": null,
+    "workTimeType": [
+      "1"
+    ]
   },
   "weightDivisor": 1000
 }
