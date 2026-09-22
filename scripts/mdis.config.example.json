@@ -11,7 +11,8 @@
     "weight": "가중값",
     "employmentStatus": "현재일관련사항_종사상지위코드",
     "salaryType": "급여형태코드",
-    "workTimeType": "근로시간형태코드"
+    "workTimeType": "근로시간형태코드",
+    "companySize": "현재일관련사항_종사자규모코드"
   },
   "wageMultiplier": 10000,
   "ageBands": [
@@ -59,7 +60,7 @@
   "meta": {
     "surveyName": "경제활동인구조사 근로형태별 부가조사",
     "surveyPeriod": "2025년 8월",
-    "wageDefinition": "최근 3개월간 평균 급여 · 상용근로자 · 전일제 기준",
+    "wageDefinition": "세금 공제 전 월평균 급여 (상여금 포함) · 상용근로자 · 전일제",
     "sourceUrl": "https://mdis.mods.go.kr/"
   },
   "filters": {
@@ -71,5 +72,13 @@
       "1"
     ]
   },
-  "weightDivisor": 1000
+  "weightDivisor": 1000,
+  "companySizeMap": {
+    "1": "lt5",
+    "2": "to9",
+    "3": "to29",
+    "4": "to99",
+    "5": "to299",
+    "6": "over300"
+  }
 }

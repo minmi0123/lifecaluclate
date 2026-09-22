@@ -11,6 +11,18 @@ API를 직접 부르지 않으므로 CORS·API 키 노출·http 전용 API 문�
 MDIS 원자료(CSV) ──[build-salary-stats.mjs]──> src/data/salary-stats.json ──> 정적 페이지
 ```
 
+## 출력 JSON 의 두 블록
+
+`cells` 와 `breakdowns` 는 역할이 다르다.
+
+- `cells` — 나이 × 성별 × 직종을 전부 교차한다. "내 월급이 상위 몇 %" 를 계산하는
+  쪽이다. 축을 하나 더하면 조합이 곱으로 늘고 폴백도 다시 짜야 한다.
+- `breakdowns` — 그래프용. 축 한둘로만 쪼갠다. 축을 더해도 덧셈으로만 늘고,
+  표본이 `minSampleSize` 미만인 칸은 `null` 로 비워 화면이 건너뛰게 한다.
+
+새 그래프를 붙일 때는 `buildBreakdowns()` 에 집계를 추가한다.
+`cells` 는 건드리지 않는다.
+
 ## 지금 들어있는 데이터
 
 **`src/data/salary-stats.json` 은 실제 원자료로 만든 것이다** (2026-09-19 교체).

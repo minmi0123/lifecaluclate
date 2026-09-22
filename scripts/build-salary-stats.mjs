@@ -10,8 +10,8 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PERCENTILE_POINTS, quantileCurve, weightedMean } from './lib/stats.mjs';
-import { AGE_BANDS, GENDERS, OCCUPATIONS, cellKey } from './lib/dimensions.mjs';
+import { PERCENTILE_POINTS, quantileCurve, weightedMean, weightedQuantile } from './lib/stats.mjs';
+import { AGE_BANDS, GENDERS, OCCUPATIONS, COMPANY_SIZES, cellKey, gridKey } from './lib/dimensions.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -56,6 +56,38 @@ function toAgeBand(age, bands) {
   return hit ? hit.id : null;
 }
 
+/**
+ * 그래프용 얕은 집계.
+ *
+ * `cells` 는 나이 × 성별 × 직종을 전부 교차해서 "내 순위"를 계산하지만,
+ * 그래프는 축 한둘이면 충분하다. 여기에 축을 더하면 조합 수가 선형으로만 늘어난다.
+ * 표본이 minSampleSize 미만인 칸은 null 로 비워 화면이 알아서 건너뛰게 한다.
+ */
+function buildBreakdowns(gridBuckets, minSampleSize, weightDivisor) {
+  const rows = AGE_BANDS.filter((a) => a.id !== 'all');
+  const summarize = (entries) => {
+    if (!entries || entries.length < minSampleSize) return null;
+    const sorted = [...entries].sort((a, b) => a.value - b.value);
+    return {
+      n: sorted.length,
+      weightedN: Math.round(sorted.reduce((sum, r) => sum + r.weight, 0) / weightDivisor),
+      median: Math.round(weightedQuantile(sorted, 50) / 1000) * 1000,
+    };
+  };
+
+  return {
+    ageByCompanySize: {
+      label: '나이대별 · 회사 규모별 중위 월급',
+      rows: rows.map((a) => ({ id: a.id, label: a.label })),
+      cols: COMPANY_SIZES.map((c) => ({ id: c.id, label: c.label })),
+      overall: COMPANY_SIZES.map((c) => summarize(gridBuckets.get(gridKey('all', c.id)))),
+      values: rows.map((a) =>
+        COMPANY_SIZES.map((c) => summarize(gridBuckets.get(gridKey(a.id, c.id)))),
+      ),
+    },
+  };
+}
+
 function main() {
   const configPath = process.argv[2];
   if (!configPath) {
@@ -63,7 +95,7 @@ function main() {
     process.exit(1);
   }
   const config = JSON.parse(readFileSync(resolve(ROOT, configPath), 'utf8'));
-  const { columns, ageBands, genderMap, occupationMap, wageMultiplier = 1, meta = {} } = config;
+  const { columns, ageBands, genderMap, occupationMap, companySizeMap = {}, wageMultiplier = 1, meta = {} } = config;
   // MDIS 가중값은 소수점이 생략된 정수로 내려온다(경활조사는 3자리).
   // 분위수는 가중값에 같은 배수를 곱해도 같지만, weightedN 을 실제 인원으로 만들려면 나눠야 한다.
   const weightDivisor = config.weightDivisor ?? 1;
@@ -78,11 +110,14 @@ function main() {
 
   // 조합별로 응답을 모은다. 'all'은 별도 집계가 아니라 같은 응답을 한 번 더 담는 것.
   const buckets = new Map();
+  // breakdowns 용. cells 와 달리 축을 교차하지 않고 얕게만 모은다.
+  // 그래서 축을 더해도 조합 수가 터지지 않는다(6개 늘면 6개).
+  const gridBuckets = new Map();
   const skipped = { wage: 0, age: 0, gender: 0, occupation: 0 };
   // 선택 필터가 걸러낸 행 수. 실제 데이터에서 필터가 먹히는지 보려고 센다.
   const filtered = { hours: 0, employmentStatus: 0, salaryType: 0, workTimeType: 0 };
   // 코드값 분포 — 코드북과 대조해 매핑이 맞는지 확인용.
-  const seen = { occupation: new Map(), gender: new Map(), employmentStatus: new Map(), salaryType: new Map(), workTimeType: new Map() };
+  const seen = { occupation: new Map(), gender: new Map(), employmentStatus: new Map(), salaryType: new Map(), workTimeType: new Map(), companySize: new Map() };
   const bump = (map, key) => map.set(key, (map.get(key) ?? 0) + 1);
 
   for (const rec of records) {
@@ -135,6 +170,20 @@ function main() {
     if (!occupation) skipped.occupation += 1;
 
     const entry = { value: wage, weight };
+
+    // ── breakdowns: 나이대 × 회사 규모 ──
+    if (columns.companySize) {
+      const size = companySizeMap[String(rec[columns.companySize]).trim()];
+      bump(seen.companySize, String(rec[columns.companySize]).trim());
+      if (size) {
+        for (const a of [age, 'all']) {
+          const key = gridKey(a, size);
+          if (!gridBuckets.has(key)) gridBuckets.set(key, []);
+          gridBuckets.get(key).push(entry);
+        }
+      }
+    }
+
     for (const a of [age, 'all']) {
       for (const g of [gender, 'all']) {
         for (const o of occupation ? [occupation, 'all'] : ['all']) {
@@ -172,6 +221,7 @@ function main() {
     },
     dimensions: { age: AGE_BANDS, gender: GENDERS, occupation: OCCUPATIONS },
     cells,
+    breakdowns: buildBreakdowns(gridBuckets, config.minSampleSize ?? 30, weightDivisor),
   };
 
   const outPath = resolve(ROOT, config.output ?? 'src/data/salary-stats.json');
@@ -198,6 +248,7 @@ function main() {
   if (seen.employmentStatus.size) show('종사상지위', seen.employmentStatus);
   if (seen.salaryType.size) show('급여형태', seen.salaryType);
   if (seen.workTimeType.size) show('근로시간형태', seen.workTimeType);
+  if (seen.companySize.size) show('종사자규모', seen.companySize);
   console.log('  (코드북과 대조해 매핑이 맞는지 확인하세요)');
 
   const missing = [];

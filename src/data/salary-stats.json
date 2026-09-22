@@ -3,7 +3,7 @@
     "isSample": false,
     "surveyName": "경제활동인구조사 근로형태별 부가조사",
     "surveyPeriod": "2025년 8월",
-    "wageDefinition": "최근 3개월간 평균 급여 · 상용근로자 · 전일제 기준",
+    "wageDefinition": "세금 공제 전 월평균 급여 (상여금 포함) · 상용근로자 · 전일제",
     "sourceUrl": "https://mdis.mods.go.kr/",
     "generatedAt": "2026-09-22",
     "minSampleSize": 30,
@@ -5276,6 +5276,253 @@
         7682000,
         8000000,
         8000000
+      ]
+    }
+  },
+  "breakdowns": {
+    "ageByCompanySize": {
+      "label": "나이대별 · 회사 규모별 중위 월급",
+      "rows": [
+        {
+          "id": "20s",
+          "label": "20대"
+        },
+        {
+          "id": "30s",
+          "label": "30대"
+        },
+        {
+          "id": "40s",
+          "label": "40대"
+        },
+        {
+          "id": "50s",
+          "label": "50대"
+        },
+        {
+          "id": "60plus",
+          "label": "60대 이상"
+        }
+      ],
+      "cols": [
+        {
+          "id": "lt5",
+          "label": "1-4명"
+        },
+        {
+          "id": "to9",
+          "label": "5-9명"
+        },
+        {
+          "id": "to29",
+          "label": "10-29명"
+        },
+        {
+          "id": "to99",
+          "label": "30-99명"
+        },
+        {
+          "id": "to299",
+          "label": "100-299명"
+        },
+        {
+          "id": "over300",
+          "label": "300명+"
+        }
+      ],
+      "overall": [
+        {
+          "n": 1721,
+          "weightedN": 1508341,
+          "median": 2700000
+        },
+        {
+          "n": 2386,
+          "weightedN": 2128466,
+          "median": 3000000
+        },
+        {
+          "n": 3826,
+          "weightedN": 3440227,
+          "median": 3000000
+        },
+        {
+          "n": 3915,
+          "weightedN": 3504308,
+          "median": 3227000
+        },
+        {
+          "n": 2075,
+          "weightedN": 1887396,
+          "median": 3600000
+        },
+        {
+          "n": 3247,
+          "weightedN": 3111458,
+          "median": 4500000
+        }
+      ],
+      "values": [
+        [
+          {
+            "n": 172,
+            "weightedN": 179119,
+            "median": 2500000
+          },
+          {
+            "n": 294,
+            "weightedN": 317926,
+            "median": 2500000
+          },
+          {
+            "n": 411,
+            "weightedN": 466489,
+            "median": 2600000
+          },
+          {
+            "n": 424,
+            "weightedN": 452659,
+            "median": 2800000
+          },
+          {
+            "n": 222,
+            "weightedN": 240824,
+            "median": 3000000
+          },
+          {
+            "n": 364,
+            "weightedN": 422930,
+            "median": 3300000
+          }
+        ],
+        [
+          {
+            "n": 280,
+            "weightedN": 290701,
+            "median": 2800000
+          },
+          {
+            "n": 456,
+            "weightedN": 472888,
+            "median": 3000000
+          },
+          {
+            "n": 788,
+            "weightedN": 834185,
+            "median": 3000000
+          },
+          {
+            "n": 871,
+            "weightedN": 920169,
+            "median": 3200000
+          },
+          {
+            "n": 539,
+            "weightedN": 567382,
+            "median": 3500000
+          },
+          {
+            "n": 954,
+            "weightedN": 1065017,
+            "median": 4100000
+          }
+        ],
+        [
+          {
+            "n": 426,
+            "weightedN": 363763,
+            "median": 2848000
+          },
+          {
+            "n": 598,
+            "weightedN": 527822,
+            "median": 3200000
+          },
+          {
+            "n": 938,
+            "weightedN": 811993,
+            "median": 3500000
+          },
+          {
+            "n": 1005,
+            "weightedN": 870852,
+            "median": 3869000
+          },
+          {
+            "n": 616,
+            "weightedN": 527993,
+            "median": 4300000
+          },
+          {
+            "n": 971,
+            "weightedN": 874254,
+            "median": 5000000
+          }
+        ],
+        [
+          {
+            "n": 456,
+            "weightedN": 377490,
+            "median": 3000000
+          },
+          {
+            "n": 592,
+            "weightedN": 473293,
+            "median": 3000000
+          },
+          {
+            "n": 1049,
+            "weightedN": 862418,
+            "median": 3500000
+          },
+          {
+            "n": 1081,
+            "weightedN": 872795,
+            "median": 3765000
+          },
+          {
+            "n": 536,
+            "weightedN": 420742,
+            "median": 4150000
+          },
+          {
+            "n": 828,
+            "weightedN": 652684,
+            "median": 5119000
+          }
+        ],
+        [
+          {
+            "n": 387,
+            "weightedN": 297267,
+            "median": 2403000
+          },
+          {
+            "n": 446,
+            "weightedN": 336538,
+            "median": 2750000
+          },
+          {
+            "n": 640,
+            "weightedN": 465142,
+            "median": 2700000
+          },
+          {
+            "n": 534,
+            "weightedN": 387834,
+            "median": 2600000
+          },
+          {
+            "n": 162,
+            "weightedN": 130455,
+            "median": 2900000
+          },
+          {
+            "n": 130,
+            "weightedN": 96572,
+            "median": 4000000
+          }
+        ]
       ]
     }
   }

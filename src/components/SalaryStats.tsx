@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './SalaryStats.css';
 import AgeTrendChart from './AgeTrendChart';
+import CompanySizeChart from './CompanySizeChart';
 import {
   buildAgeTrend,
   formatManwon,
@@ -56,6 +57,10 @@ const SalaryStats: React.FC<{
     () => (dataset ? buildAgeTrend(dataset, selection) : null),
     [dataset, selection],
   );
+
+  // 회사 규모 그래프는 고른 조합과 무관하게 같은 값을 쓴다.
+  // 나이대 선택은 색을 진하게 하는 데만 쓰고 데이터를 바꾸지 않는다.
+  const sizeGrid = dataset?.breakdowns?.ageByCompanySize ?? null;
 
   const analysis = useMemo(() => {
     if (!dataset || !resolved || wage <= 0) return null;
@@ -184,7 +189,7 @@ const SalaryStats: React.FC<{
         </div>
 
         <div className="ss-salary-input">
-          <span className="ss-field-label">내 월급</span>
+          <span className="ss-field-label">내 월급 <em className="ss-pretax">세전</em></span>
           <div className="ss-stepper">
             <button className="ss-step-button" type="button" onClick={() => adjustSalary(-10)}>−</button>
             <input
@@ -192,11 +197,15 @@ const SalaryStats: React.FC<{
               type="text"
               inputMode="numeric"
               value={salary}
-              aria-label="내 월급 (만원)"
+              aria-label="내 월급 (세전, 만원)"
               onChange={(e) => onSalaryChange(`${e.target.value.replace(/[^0-9]/g, '')}만원`)}
             />
             <button className="ss-step-button" type="button" onClick={() => adjustSalary(10)}>+</button>
           </div>
+          <p className="ss-pretax-note">
+            세금 떼기 <strong>전</strong> 금액으로 넣어주세요. 통장에 찍히는 실수령액을 넣으면
+            실제보다 낮은 순위가 나옵니다.
+          </p>
           <p className="ss-wage-definition">기준: {meta.wageDefinition}</p>
           <p className="ss-wage-shared">여기 입력한 월급을 아래 부자 · 저축 · 커피에서도 그대로 씁니다.</p>
         </div>
@@ -338,6 +347,19 @@ const SalaryStats: React.FC<{
                   {ageTrend.hiddenCount > 0 && ` 표본이 ${meta.minSampleSize}명보다 적은 나이대는 비워 뒀어요.`}
                 </p>
               </figure>
+            )}
+
+            {sizeGrid && (
+            <figure className="ss-figure">
+              <figcaption className="ss-figure-title">{sizeGrid.label}</figcaption>
+
+              <CompanySizeChart grid={sizeGrid} wage={wage} myAgeId={selection.age} />
+
+              <p className="ss-figure-caption">
+                성별 · 직종과 상관없이 나이대와 회사 규모로만 나눈 값이에요.
+                조사가 <strong>300명 이상</strong>을 더 쪼개지 않아서 그 위는 알 수 없어요.
+              </p>
+            </figure>
             )}
 
             <details className="ss-table-toggle">

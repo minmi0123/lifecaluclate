@@ -30,6 +30,33 @@ export interface SalaryMeta {
   percentilePoints: number[];
 }
 
+/** breakdowns 한 칸. 표본이 모자라면 null 이 들어온다. */
+export interface BreakdownCell {
+  n: number;
+  weightedN: number;
+  median: number;
+}
+
+/**
+ * 그래프용 얕은 집계.
+ *
+ * `cells` 가 "내 순위"를 위해 축 세 개를 교차하는 것과 달리,
+ * 여기는 축 한둘로만 쪼갠다. 그래서 축을 더해도 데이터가 선형으로만 는다.
+ */
+export interface Grid {
+  label: string;
+  rows: DimensionOption[];
+  cols: DimensionOption[];
+  /** 나이대를 가리지 않은 전체 줄. rows 와 같은 col 순서. */
+  overall: (BreakdownCell | null)[];
+  /** [rows][cols] 순서. */
+  values: (BreakdownCell | null)[][];
+}
+
+export interface Breakdowns {
+  ageByCompanySize: Grid;
+}
+
 export interface SalaryDataset {
   meta: SalaryMeta;
   dimensions: {
@@ -38,6 +65,7 @@ export interface SalaryDataset {
     occupation: DimensionOption[];
   };
   cells: Record<string, SalaryCell>;
+  breakdowns: Breakdowns;
 }
 
 export interface Selection {

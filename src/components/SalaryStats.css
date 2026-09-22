@@ -178,6 +178,32 @@
   line-height: 1.4;
 }
 
+/* 세전 안내. 이 데이터는 세금 공제 전 금액이라, 실수령액을 넣으면
+   순위가 통째로 밀린다. 눈에 띄어야 해서 본문 색을 그대로 쓴다. */
+.ss-pretax {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background-color: var(--ss-bar-mine);
+  color: #ffffff;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ss-pretax-note {
+  margin: 0;
+  font-size: 13px;
+  color: var(--ss-text);
+  line-height: 1.5;
+}
+
+.ss-pretax-note strong {
+  color: var(--ss-bar-mine);
+}
+
 .ss-hint {
   margin: 0;
   text-align: center;
@@ -461,4 +487,64 @@
 .ss-trend-crosshair {
   stroke: var(--ss-border);
   stroke-width: 1;
+}
+
+/* ── 회사 규모 그래프 ── */
+
+/* 고른 나이대를 굵게, 나머지는 살짝 옅게.
+   더 옅게 하면 "나이가 많을수록 선이 더 벌어진다"는 핵심이 안 보인다. */
+.ss-size-series-focus .ss-trend-line {
+  stroke-width: 3;
+}
+
+/* 색을 이미 회색으로 눕혔으므로 투명도는 살짝만 준다.
+   더 내리면 "회사가 커질수록 올라간다"는 흐름 자체가 안 보인다. */
+.ss-size-series-dim {
+  opacity: 0.9;
+}
+
+.ss-size-series-label {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: inherit;
+}
+
+/* 내 월급 기준선. 어느 규모대에 걸치는지 보라고 긋는다. */
+.ss-size-mywage {
+  stroke: var(--ss-marker);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+.ss-size-mywage-label {
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--ss-marker);
+}
+
+.ss-size-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12px;
+  color: var(--ss-text-muted);
+}
+
+.ss-size-legend li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ss-size-legend-dim {
+  opacity: 0.9;
+}
+
+.ss-size-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
 }

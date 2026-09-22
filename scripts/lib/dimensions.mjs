@@ -35,7 +35,26 @@ export const OCCUPATIONS = [
   { id: 'labor', label: '단순 노무 종사자' },
 ];
 
+/**
+ * 회사 규모.
+ *
+ * 조사표 18번은 `300~499명` 과 `500명 이상` 을 나눠 묻지만, 공공용 자료는
+ * 둘을 합쳐 `300명 이상` 하나로 내려준다. 그래서 여기도 6구간이 끝이고,
+ * "500명 이상 대기업" 만 따로 보는 것은 이 자료로는 불가능하다.
+ */
+export const COMPANY_SIZES = [
+  { id: 'lt5', label: '1-4명' },
+  { id: 'to9', label: '5-9명' },
+  { id: 'to29', label: '10-29명' },
+  { id: 'to99', label: '30-99명' },
+  { id: 'to299', label: '100-299명' },
+  { id: 'over300', label: '300명+' },
+];
+
 export const cellKey = (age, gender, occupation) => `${age}|${gender}|${occupation}`;
+
+/** breakdowns 용 키. cells 와 섞이지 않도록 따로 둔다. */
+export const gridKey = (row, col) => `${row}>${col}`;
 
 /**
  * 표본이 부족할 때 넓혀 볼 순서.
