@@ -5524,6 +5524,239 @@
           }
         ]
       ]
+    },
+    "ageByTenure": {
+      "label": "나이대별 · 근속기간별 중위 월급",
+      "rows": [
+        {
+          "id": "20s",
+          "label": "20대"
+        },
+        {
+          "id": "30s",
+          "label": "30대"
+        },
+        {
+          "id": "40s",
+          "label": "40대"
+        },
+        {
+          "id": "50s",
+          "label": "50대"
+        },
+        {
+          "id": "60plus",
+          "label": "60대 이상"
+        }
+      ],
+      "cols": [
+        {
+          "id": "lt1y",
+          "label": "1년미만"
+        },
+        {
+          "id": "to3y",
+          "label": "1~3년"
+        },
+        {
+          "id": "to5y",
+          "label": "3~5년"
+        },
+        {
+          "id": "to10y",
+          "label": "5~10년"
+        },
+        {
+          "id": "to20y",
+          "label": "10~20년"
+        },
+        {
+          "id": "over20y",
+          "label": "20년+"
+        }
+      ],
+      "overall": [
+        {
+          "n": 2399,
+          "weightedN": 2296635,
+          "median": 2800000
+        },
+        {
+          "n": 3404,
+          "weightedN": 3315707,
+          "median": 3000000
+        },
+        {
+          "n": 2175,
+          "weightedN": 1996417,
+          "median": 3000000
+        },
+        {
+          "n": 3325,
+          "weightedN": 3065055,
+          "median": 3300000
+        },
+        {
+          "n": 3412,
+          "weightedN": 2951685,
+          "median": 4000000
+        },
+        {
+          "n": 2455,
+          "weightedN": 1954696,
+          "median": 5000000
+        }
+      ],
+      "values": [
+        [
+          {
+            "n": 610,
+            "weightedN": 671335,
+            "median": 2669000
+          },
+          {
+            "n": 751,
+            "weightedN": 846879,
+            "median": 2800000
+          },
+          {
+            "n": 357,
+            "weightedN": 384319,
+            "median": 2918000
+          },
+          {
+            "n": 163,
+            "weightedN": 169876,
+            "median": 3000000
+          },
+          null,
+          null
+        ],
+        [
+          {
+            "n": 534,
+            "weightedN": 587838,
+            "median": 3000000
+          },
+          {
+            "n": 874,
+            "weightedN": 983508,
+            "median": 3000000
+          },
+          {
+            "n": 644,
+            "weightedN": 678544,
+            "median": 3200000
+          },
+          {
+            "n": 1189,
+            "weightedN": 1263044,
+            "median": 3500000
+          },
+          {
+            "n": 642,
+            "weightedN": 632680,
+            "median": 4000000
+          },
+          null
+        ],
+        [
+          {
+            "n": 484,
+            "weightedN": 430002,
+            "median": 3000000
+          },
+          {
+            "n": 660,
+            "weightedN": 585210,
+            "median": 3000000
+          },
+          {
+            "n": 496,
+            "weightedN": 437854,
+            "median": 3400000
+          },
+          {
+            "n": 834,
+            "weightedN": 738751,
+            "median": 3747000
+          },
+          {
+            "n": 1474,
+            "weightedN": 1267495,
+            "median": 4500000
+          },
+          {
+            "n": 606,
+            "weightedN": 517364,
+            "median": 5000000
+          }
+        ],
+        [
+          {
+            "n": 432,
+            "weightedN": 366111,
+            "median": 3000000
+          },
+          {
+            "n": 649,
+            "weightedN": 543550,
+            "median": 3000000
+          },
+          {
+            "n": 398,
+            "weightedN": 303140,
+            "median": 3000000
+          },
+          {
+            "n": 684,
+            "weightedN": 556384,
+            "median": 3100000
+          },
+          {
+            "n": 894,
+            "weightedN": 732403,
+            "median": 3597000
+          },
+          {
+            "n": 1485,
+            "weightedN": 1157833,
+            "median": 5000000
+          }
+        ],
+        [
+          {
+            "n": 339,
+            "weightedN": 241350,
+            "median": 2493000
+          },
+          {
+            "n": 470,
+            "weightedN": 356560,
+            "median": 2500000
+          },
+          {
+            "n": 280,
+            "weightedN": 192561,
+            "median": 2500000
+          },
+          {
+            "n": 455,
+            "weightedN": 336999,
+            "median": 2600000
+          },
+          {
+            "n": 396,
+            "weightedN": 311566,
+            "median": 3000000
+          },
+          {
+            "n": 359,
+            "weightedN": 274771,
+            "median": 3800000
+          }
+        ]
+      ]
     }
   }
 }

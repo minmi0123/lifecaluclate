@@ -11,7 +11,9 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PERCENTILE_POINTS, quantileCurve, weightedMean, weightedQuantile } from './lib/stats.mjs';
-import { AGE_BANDS, GENDERS, OCCUPATIONS, COMPANY_SIZES, cellKey, gridKey } from './lib/dimensions.mjs';
+import {
+  AGE_BANDS, GENDERS, OCCUPATIONS, COMPANY_SIZES, TENURE_BANDS, cellKey, gridKey,
+} from './lib/dimensions.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -48,6 +50,25 @@ function parseCsv(text) {
   return rows.map((r) => Object.fromEntries(header.map((h, i) => [h, r[i] ?? ''])));
 }
 
+/**
+ * 직장 시작 연월과 조사 연월의 차이를 근속 구간 id 로 바꾼다.
+ * 둘 다 `YYYYMM` 문자열이다. 미해당(`000000`)이거나 시작이 조사보다
+ * 뒤면 근속을 알 수 없으므로 null 을 준다.
+ */
+function toTenureBand(startYm, surveyYm) {
+  const start = String(startYm ?? '').trim();
+  const survey = String(surveyYm ?? '').trim();
+  if (start.length !== 6 || survey.length !== 6) return null;
+  if (start === '000000' || survey === '000000') return null;
+
+  const months = (Number(survey.slice(0, 4)) - Number(start.slice(0, 4))) * 12
+    + (Number(survey.slice(4)) - Number(start.slice(4)));
+  if (!Number.isFinite(months) || months < 0) return null;
+
+  const hit = TENURE_BANDS.find((b) => months <= b.maxMonths);
+  return hit ? hit.id : null;
+}
+
 /** 응답자 한 명의 나이를 나이대 id 로 바꾼다. */
 function toAgeBand(age, bands) {
   const n = Number(age);
@@ -75,16 +96,19 @@ function buildBreakdowns(gridBuckets, minSampleSize, weightDivisor) {
     };
   };
 
+  const grid = (name, label, cols) => ({
+    label,
+    rows: rows.map((a) => ({ id: a.id, label: a.label })),
+    cols: cols.map((c) => ({ id: c.id, label: c.label })),
+    overall: cols.map((c) => summarize(gridBuckets.get(gridKey(name, 'all', c.id)))),
+    values: rows.map((a) =>
+      cols.map((c) => summarize(gridBuckets.get(gridKey(name, a.id, c.id)))),
+    ),
+  });
+
   return {
-    ageByCompanySize: {
-      label: '나이대별 · 회사 규모별 중위 월급',
-      rows: rows.map((a) => ({ id: a.id, label: a.label })),
-      cols: COMPANY_SIZES.map((c) => ({ id: c.id, label: c.label })),
-      overall: COMPANY_SIZES.map((c) => summarize(gridBuckets.get(gridKey('all', c.id)))),
-      values: rows.map((a) =>
-        COMPANY_SIZES.map((c) => summarize(gridBuckets.get(gridKey(a.id, c.id)))),
-      ),
-    },
+    ageByCompanySize: grid('ageByCompanySize', '나이대별 · 회사 규모별 중위 월급', COMPANY_SIZES),
+    ageByTenure: grid('ageByTenure', '나이대별 · 근속기간별 중위 월급', TENURE_BANDS),
   };
 }
 
@@ -117,7 +141,7 @@ function main() {
   // 선택 필터가 걸러낸 행 수. 실제 데이터에서 필터가 먹히는지 보려고 센다.
   const filtered = { hours: 0, employmentStatus: 0, salaryType: 0, workTimeType: 0 };
   // 코드값 분포 — 코드북과 대조해 매핑이 맞는지 확인용.
-  const seen = { occupation: new Map(), gender: new Map(), employmentStatus: new Map(), salaryType: new Map(), workTimeType: new Map(), companySize: new Map() };
+  const seen = { occupation: new Map(), gender: new Map(), employmentStatus: new Map(), salaryType: new Map(), workTimeType: new Map(), companySize: new Map(), tenure: new Map() };
   const bump = (map, key) => map.set(key, (map.get(key) ?? 0) + 1);
 
   for (const rec of records) {
@@ -171,17 +195,27 @@ function main() {
 
     const entry = { value: wage, weight };
 
-    // ── breakdowns: 나이대 × 회사 규모 ──
-    if (columns.companySize) {
-      const size = companySizeMap[String(rec[columns.companySize]).trim()];
-      bump(seen.companySize, String(rec[columns.companySize]).trim());
-      if (size) {
-        for (const a of [age, 'all']) {
-          const key = gridKey(a, size);
-          if (!gridBuckets.has(key)) gridBuckets.set(key, []);
-          gridBuckets.get(key).push(entry);
-        }
+    // ── breakdowns ──
+    // 나이대별 줄과 '전체' 줄에 같은 응답을 한 번씩 담는다.
+    const pushGrid = (name, col) => {
+      if (!col) return;
+      for (const a of [age, 'all']) {
+        const key = gridKey(name, a, col);
+        if (!gridBuckets.has(key)) gridBuckets.set(key, []);
+        gridBuckets.get(key).push(entry);
       }
+    };
+
+    if (columns.companySize) {
+      const code = String(rec[columns.companySize]).trim();
+      bump(seen.companySize, code);
+      pushGrid('ageByCompanySize', companySizeMap[code]);
+    }
+
+    if (columns.jobStartYm && columns.surveyYm) {
+      const tenure = toTenureBand(rec[columns.jobStartYm], rec[columns.surveyYm]);
+      bump(seen.tenure, tenure ?? '(알 수 없음)');
+      pushGrid('ageByTenure', tenure);
     }
 
     for (const a of [age, 'all']) {
@@ -249,6 +283,7 @@ function main() {
   if (seen.salaryType.size) show('급여형태', seen.salaryType);
   if (seen.workTimeType.size) show('근로시간형태', seen.workTimeType);
   if (seen.companySize.size) show('종사자규모', seen.companySize);
+  if (seen.tenure.size) show('근속구간', seen.tenure);
   console.log('  (코드북과 대조해 매핑이 맞는지 확인하세요)');
 
   const missing = [];

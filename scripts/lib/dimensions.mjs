@@ -51,10 +51,28 @@ export const COMPANY_SIZES = [
   { id: 'over300', label: '300명+' },
 ];
 
+/**
+ * 근속기간.
+ *
+ * `현재일관련사항_직장시작연월` 과 `조사연월` 의 차이로 구한다.
+ * 20대는 10년 이상 칸이 비는 것이 정상이다(그 나이에 불가능하다).
+ */
+export const TENURE_BANDS = [
+  { id: 'lt1y', label: '1년미만', maxMonths: 11 },
+  { id: 'to3y', label: '1~3년', maxMonths: 35 },
+  { id: 'to5y', label: '3~5년', maxMonths: 59 },
+  { id: 'to10y', label: '5~10년', maxMonths: 119 },
+  { id: 'to20y', label: '10~20년', maxMonths: 239 },
+  { id: 'over20y', label: '20년+', maxMonths: Infinity },
+];
+
 export const cellKey = (age, gender, occupation) => `${age}|${gender}|${occupation}`;
 
-/** breakdowns 용 키. cells 와 섞이지 않도록 따로 둔다. */
-export const gridKey = (row, col) => `${row}>${col}`;
+/**
+ * breakdowns 용 키. cells 와 섞이지 않도록 따로 둔다.
+ * 그래프가 여럿이므로 이름을 앞에 붙여 서로 겹치지 않게 한다.
+ */
+export const gridKey = (name, row, col) => `${name}|${row}>${col}`;
 
 /**
  * 표본이 부족할 때 넓혀 볼 순서.

@@ -55,6 +55,7 @@ export interface Grid {
 
 export interface Breakdowns {
   ageByCompanySize: Grid;
+  ageByTenure: Grid;
 }
 
 export interface SalaryDataset {

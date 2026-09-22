@@ -548,3 +548,34 @@
   height: 10px;
   border-radius: 3px;
 }
+
+/* 가로축 스위치. 두 그래프가 모양이 같아 한 자리를 나눠 쓴다.
+   페이지 맨 위 탭과 헷갈리지 않게 더 작고 납작하게 둔다. */
+.ss-grid-switch {
+  display: flex;
+  gap: 4px;
+  background-color: var(--ss-page);
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 8px;
+}
+
+.ss-grid-switch-button {
+  flex: 1;
+  min-height: 34px;
+  border: none;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--ss-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.ss-grid-switch-button[aria-pressed='true'] {
+  background-color: var(--ss-surface);
+  color: var(--ss-bar-mine);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}

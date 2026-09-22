@@ -12,7 +12,9 @@
     "employmentStatus": "현재일관련사항_종사상지위코드",
     "salaryType": "급여형태코드",
     "workTimeType": "근로시간형태코드",
-    "companySize": "현재일관련사항_종사자규모코드"
+    "companySize": "현재일관련사항_종사자규모코드",
+    "jobStartYm": "현재일관련사항_직장시작연월",
+    "surveyYm": "조사연월"
   },
   "wageMultiplier": 10000,
   "ageBands": [

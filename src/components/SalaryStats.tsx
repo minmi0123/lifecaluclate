@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './SalaryStats.css';
 import AgeTrendChart from './AgeTrendChart';
-import CompanySizeChart from './CompanySizeChart';
+import AgeGridChart from './AgeGridChart';
 import {
   buildAgeTrend,
   formatManwon,
@@ -34,6 +34,7 @@ const SalaryStats: React.FC<{
   const [loadError, setLoadError] = useState('');
   const [selection, setSelection] = useState<Selection>({ age: '30s', gender: 'all', occupation: 'all' });
   const [hoveredBin, setHoveredBin] = useState<number | null>(null);
+  const [gridTab, setGridTab] = useState<'companySize' | 'tenure'>('companySize');
 
   useEffect(() => {
     const controller = new AbortController();
@@ -58,9 +59,43 @@ const SalaryStats: React.FC<{
     [dataset, selection],
   );
 
-  // 회사 규모 그래프는 고른 조합과 무관하게 같은 값을 쓴다.
-  // 나이대 선택은 색을 진하게 하는 데만 쓰고 데이터를 바꾸지 않는다.
-  const sizeGrid = dataset?.breakdowns?.ageByCompanySize ?? null;
+  // 두 그래프 모두 고른 조합과 무관하게 같은 값을 쓴다.
+  // 나이대 선택은 어느 줄을 강조할지 정할 뿐 데이터를 바꾸지 않는다.
+  const gridTabs = useMemo(() => {
+    const b = dataset?.breakdowns;
+    if (!b) return [];
+    return [
+      b.ageByCompanySize && {
+        id: 'companySize' as const,
+        label: '회사 규모',
+        grid: b.ageByCompanySize,
+        hint: '회사가 커질수록 선이 벌어져요. 나이가 많을수록 더 벌어집니다',
+        focusedHint: '회색 줄은 다른 나이대예요. 회사가 커질수록 모든 줄이 올라갑니다',
+        caption: (
+          <>
+            성별 · 직종과 상관없이 나이대와 회사 규모로만 나눈 값이에요.
+            조사가 <strong>300명 이상</strong>을 더 쪼개지 않아서 그 위는 알 수 없어요.
+          </>
+        ),
+      },
+      b.ageByTenure && {
+        id: 'tenure' as const,
+        label: '근속기간',
+        grid: b.ageByTenure,
+        hint: '한 직장에 오래 다닐수록 올라가요. 나이대를 따로 그린 건 일부러예요',
+        focusedHint: '회색 줄은 다른 나이대예요. 같은 나이라도 근속에 따라 달라집니다',
+        caption: (
+          <>
+            나이대를 섞으면 <strong>근속이 아니라 나이를 보게 돼요</strong>.
+            20년 근속자는 대부분 50대니까요. 그래서 나이대별로 따로 그렸어요.
+            오래 다닌 사람이 원래 조건이 좋은 회사였을 수도 있어요.
+          </>
+        ),
+      },
+    ].filter((t) => t != null);
+  }, [dataset]);
+
+  const activeGrid = gridTabs.find((t) => t.id === gridTab) ?? gridTabs[0] ?? null;
 
   const analysis = useMemo(() => {
     if (!dataset || !resolved || wage <= 0) return null;
@@ -349,17 +384,36 @@ const SalaryStats: React.FC<{
               </figure>
             )}
 
-            {sizeGrid && (
-            <figure className="ss-figure">
-              <figcaption className="ss-figure-title">{sizeGrid.label}</figcaption>
+            {activeGrid && (
+              <figure className="ss-figure">
+                <figcaption className="ss-figure-title">{activeGrid.grid.label}</figcaption>
 
-              <CompanySizeChart grid={sizeGrid} wage={wage} myAgeId={selection.age} />
+                {/* 두 그래프는 모양이 같아서 나란히 두면 중복처럼 보인다.
+                    한 자리에 두고 가로축만 갈아끼운다. */}
+                <div className="ss-grid-switch" role="group" aria-label="가로축 고르기">
+                  {gridTabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      type="button"
+                      className="ss-grid-switch-button"
+                      aria-pressed={tab.id === gridTab}
+                      onClick={() => setGridTab(tab.id)}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
 
-              <p className="ss-figure-caption">
-                성별 · 직종과 상관없이 나이대와 회사 규모로만 나눈 값이에요.
-                조사가 <strong>300명 이상</strong>을 더 쪼개지 않아서 그 위는 알 수 없어요.
-              </p>
-            </figure>
+                <AgeGridChart
+                  grid={activeGrid.grid}
+                  wage={wage}
+                  myAgeId={selection.age}
+                  hint={activeGrid.hint}
+                  focusedHint={activeGrid.focusedHint}
+                />
+
+                <p className="ss-figure-caption">{activeGrid.caption}</p>
+              </figure>
             )}
 
             <details className="ss-table-toggle">

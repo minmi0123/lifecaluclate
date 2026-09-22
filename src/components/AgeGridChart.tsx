@@ -31,6 +31,10 @@ interface Props {
   wage: number;
   /** 내가 고른 나이대. 'all' 이면 모든 선을 같은 굵기로 그린다. */
   myAgeId: string;
+  /** 나이대를 고르지 않았을 때(= 다섯 줄을 나란히 볼 때) 아래에 적을 말. */
+  hint: string;
+  /** 나이대를 골랐을 때 아래에 적을 말. */
+  focusedHint: string;
 }
 
 interface Point {
@@ -38,8 +42,8 @@ interface Point {
   cell: BreakdownCell;
 }
 
-const CompanySizeChart: React.FC<Props> = ({ grid, wage, myAgeId }) => {
-  // 판정 영역은 회사 규모 한 칸에 하나. 나이대별로 두면 같은 자리에 겹친다.
+const AgeGridChart: React.FC<Props> = ({ grid, wage, myAgeId, hint, focusedHint }) => {
+  // 판정 영역은 가로 한 칸에 하나. 나이대별로 두면 같은 자리에 겹친다.
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const values: number[] = [];
@@ -176,7 +180,7 @@ const CompanySizeChart: React.FC<Props> = ({ grid, wage, myAgeId }) => {
             height={PLOT.bottom - PLOT.top}
             tabIndex={0}
             role="button"
-            aria-label={`${col.label} 사업체 · ${grid.rows
+            aria-label={`${col.label} · ${grid.rows
               .map((row, ri) => {
                 const cell = grid.values[ri][i];
                 return cell ? `${row.label} 중위 ${formatManwon(cell.median)}` : `${row.label} 표본 부족`;
@@ -208,8 +212,8 @@ const CompanySizeChart: React.FC<Props> = ({ grid, wage, myAgeId }) => {
       <p className="ss-readout">
         {hoveredIndex == null
           ? focused
-            ? '회색 줄은 다른 나이대예요. 회사가 커질수록 모든 줄이 올라갑니다'
-            : '회사가 커질수록 선이 벌어져요. 나이가 많을수록 더 벌어집니다'
+            ? focusedHint
+            : hint
           : `${grid.cols[hoveredIndex].label} · ` +
             grid.rows
               .map((row, ri) => {
@@ -222,4 +226,4 @@ const CompanySizeChart: React.FC<Props> = ({ grid, wage, myAgeId }) => {
   );
 };
 
-export default CompanySizeChart;
+export default AgeGridChart;
