@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { formatManwon, splitRuns } from '../lib/salaryStats';
 import type { BreakdownCell, Grid } from '../types/salary';
 
@@ -25,6 +25,16 @@ const SERIES_COLORS = ['#86b6ef', '#5598e7', '#2a78d6', '#1c5cab', '#0d366b'];
 /** 강조하지 않는 줄. 배경과 구별되되 앞으로 나오지 않을 만큼만 진하다. */
 const CONTEXT_COLOR = '#b9bfc7';
 
+/**
+ * 한 줄만 색이 있을 때 쓰는 파랑.
+ *
+ * 램프에서 그 나이대의 단계를 그대로 쓰면 20대는 가장 옅은 단계라
+ * 강조인데도 회색 줄들 사이에서 묻힌다. 한 줄뿐일 때는 색으로 순서를
+ * 나타낼 일이 없으므로, 나이대와 무관하게 회색과 확실히 갈리는
+ * 한 가지 파랑을 쓴다.
+ */
+const HIGHLIGHT_COLOR = '#2a78d6';
+
 interface Props {
   grid: Grid;
   /** 내 월급(원). 0이면 기준선을 긋지 않는다. */
@@ -45,6 +55,16 @@ interface Point {
 const AgeGridChart: React.FC<Props> = ({ grid, wage, myAgeId, hint, focusedHint }) => {
   // 판정 영역은 가로 한 칸에 하나. 나이대별로 두면 같은 자리에 겹친다.
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  // 범례를 눌러 다른 나이대를 잠깐 들춰 볼 수 있다.
+  // 위쪽 나이대 선택과 따로 두는 이유: 그쪽을 건드리면 "내 순위" 까지 바뀐다.
+  // 여기서 바꾸는 것은 어느 줄에 색을 줄지뿐이다.
+  const [picked, setPicked] = useState<string | null>(null);
+
+  // 위에서 나이대를 바꾸면 들춰 보던 것은 풀고 그쪽을 따라간다.
+  useEffect(() => setPicked(null), [myAgeId]);
+
+  const activeAgeId = picked ?? myAgeId;
 
   const values: number[] = [];
   for (const row of grid.values) {
@@ -69,7 +89,7 @@ const AgeGridChart: React.FC<Props> = ({ grid, wage, myAgeId, hint, focusedHint 
     pts.map((p, k) => `${k === 0 ? 'M' : 'L'}${xAt(p.i)},${yAt(p.cell.median)}`).join(' ');
 
   const columnWidth = (PLOT.right - PLOT.left) / (columnCount - 1 || 1);
-  const focused = myAgeId !== 'all' && grid.rows.some((r) => r.id === myAgeId);
+  const focused = activeAgeId !== 'all' && grid.rows.some((r) => r.id === activeAgeId);
 
   return (
     <>
@@ -94,8 +114,12 @@ const AgeGridChart: React.FC<Props> = ({ grid, wage, myAgeId, hint, focusedHint 
         {grid.rows.map((row, ri) => {
           // 고른 나이대가 있으면 그 줄만 색을 주고 나머지는 회색으로 눕힌다.
           // 고르지 않았으면(전체) 다섯 줄을 순서대로 비교하는 화면이라 램프를 쓴다.
-          const dimmed = focused && row.id !== myAgeId;
-          const color = dimmed ? CONTEXT_COLOR : SERIES_COLORS[ri % SERIES_COLORS.length];
+          const dimmed = focused && row.id !== activeAgeId;
+          const color = dimmed
+            ? CONTEXT_COLOR
+            : focused
+              ? HIGHLIGHT_COLOR
+              : SERIES_COLORS[ri % SERIES_COLORS.length];
           // 표본이 모자라 빈 칸이 있으면 선을 잇지 않고 끊는다.
           // 빈 칸을 미리 걸러내면 끊긴 자리가 사라지므로 null 을 넣은 채로 넘긴다.
           const slots = grid.values[ri].map((cell, i) => ({ i, cell }));
@@ -195,25 +219,39 @@ const AgeGridChart: React.FC<Props> = ({ grid, wage, myAgeId, hint, focusedHint 
       </svg>
 
       <ul className="ss-size-legend">
-        {grid.rows.map((row, ri) => (
-          <li key={row.id} className={focused && row.id !== myAgeId ? 'ss-size-legend-dim' : undefined}>
-            <span
-              className="ss-size-swatch"
-              style={{
-                backgroundColor:
-                  focused && row.id !== myAgeId ? CONTEXT_COLOR : SERIES_COLORS[ri % SERIES_COLORS.length],
-              }}
-            />
-            {row.label}
-          </li>
-        ))}
+        {grid.rows.map((row, ri) => {
+          const isDim = focused && row.id !== activeAgeId;
+          return (
+            <li key={row.id}>
+              {/* 누르면 그 줄에 색이 간다. 이미 색이 가 있으면 눌러서 전부 되돌린다. */}
+              <button
+                type="button"
+                className={`ss-size-legend-button${isDim ? ' ss-size-legend-dim' : ''}`}
+                aria-pressed={focused && row.id === activeAgeId}
+                onClick={() => setPicked(row.id === activeAgeId ? 'all' : row.id)}
+              >
+                <span
+                  className="ss-size-swatch"
+                  style={{
+                    backgroundColor: isDim
+                      ? CONTEXT_COLOR
+                      : focused
+                        ? HIGHLIGHT_COLOR
+                        : SERIES_COLORS[ri % SERIES_COLORS.length],
+                  }}
+                />
+                {row.label}
+              </button>
+            </li>
+          );
+        })}
       </ul>
 
       <p className="ss-readout">
         {hoveredIndex == null
           ? focused
             ? focusedHint
-            : hint
+            : `${hint} · 범례를 누르면 그 나이대만 볼 수 있어요`
           : `${grid.cols[hoveredIndex].label} · ` +
             grid.rows
               .map((row, ri) => {
